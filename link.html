@@ -4,8 +4,10 @@
   <meta charset="UTF-8" />
   <title>Recepción de Vehículo - LFP SRL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <!-- Signature Pad desde CDN -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+
   <style>
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -176,10 +178,11 @@
     }
   </style>
 </head>
+
 <body>
   <div class="card">
     <h1>Recepción de Vehículo</h1>
-    <p class="small">Demo LFP SRL · Formulario + checklist + fotos + firma</p>
+    <p class="small">LFP SRL · Formulario digital</p>
 
     <!-- DATOS DEL CLIENTE -->
     <h2>Datos del Cliente</h2>
@@ -201,10 +204,10 @@
       </div>
       <div class="field half">
         <div class="label">Modelo / Año</div>
-        <!-- 🔹 CAMBIO: id más claro para que sepas que es modelo + año -->
         <input type="text" id="modeloAnio" placeholder="Ej: Hilux 2024" />
       </div>
     </div>
+
     <div class="input-row">
       <div class="field half">
         <div class="label">Placa</div>
@@ -218,109 +221,69 @@
 
     <!-- ELEMENTOS VERIFICADOS -->
     <h2>Elementos verificados</h2>
-    <p class="small">Marcar los elementos revisados en el ingreso.</p>
+    <p class="small">Seleccione los elementos revisados</p>
     <div class="checklist">
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Viseras" /> Viseras
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Retrovisores" /> Retrovisores
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Lateral derecho" /> Lateral derecho
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Lateral izquierdo" /> Lateral izquierdo
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Laterales posteriores" /> Laterales posteriores
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Herramienta" /> Herramienta
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Limpiaparabrisas" /> Limpiaparabrisas
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Llanta auxiliar" /> Llanta auxiliar
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Tapa aros" /> Tapa aros
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Espejo interior" /> Espejo interior
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Antena" /> Antena
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Pintura" /> Pintura
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Faroles" /> Faroles
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Equipo de sonido" /> Equipo de sonido
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Asientos" /> Asientos
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Cenicero" /> Cenicero
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Gato" /> Gato
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Cinturones" /> Cinturones
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="Batería" /> Batería
-      </label>
-      <label class="check-item">
-        <input type="checkbox" name="elementos" value="USB" /> USB
-      </label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Viseras" />Viseras</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Retrovisores" />Retrovisores</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Lateral derecho" />Lateral derecho</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Lateral izquierdo" />Lateral izquierdo</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Laterales posteriores" />Laterales posteriores</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Herramienta" />Herramienta</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Limpiaparabrisas" />Limpiaparabrisas</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Llanta auxiliar" />Llanta auxiliar</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Tapa aros" />Tapa aros</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Espejo interior" />Espejo interior</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Antena" />Antena</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Pintura" />Pintura</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Faroles" />Faroles</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Equipo de sonido" />Equipo de sonido</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Asientos" />Asientos</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Cenicero" />Cenicero</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Gato" />Gato</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Cinturones" />Cinturones</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Batería" />Batería</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="USB" />USB</label>
     </div>
 
-    <!-- TRABAJO A REALIZAR -->
+    <!-- TRABAJO -->
     <h2>Trabajo a realizar</h2>
     <div class="field">
-      <div class="label">Servicio solicitado</div>
-      <textarea id="trabajo" placeholder="Ej: Nano cerámico, PPF, cambio de parabrisas, reparación, etc."></textarea>
+      <textarea id="trabajo" placeholder="Ej: Nano cerámico, PPF, etc."></textarea>
     </div>
 
     <!-- OBSERVACIONES -->
-    <h2>Observaciones del vehículo</h2>
+    <h2>Observaciones</h2>
     <div class="field">
-      <textarea id="observaciones" placeholder="Golpes, rayones, accesorios, objetos personales, etc."></textarea>
+      <textarea id="observaciones" placeholder="Golpes, rayones, etc."></textarea>
     </div>
 
     <!-- FOTOS -->
-    <h2>Fotos del vehículo (opcional)</h2>
-    <p class="small">Puedes tomar fotos de daños, parabrisas, interiores, etc.</p>
+    <h2>Fotos del vehículo</h2>
     <div class="field">
       <input type="file" id="fotos" accept="image/*" multiple />
     </div>
 
     <!-- FIRMA -->
     <h2>Firma del Cliente</h2>
-    <p class="small">Firme dentro del recuadro con su dedo o con el mouse:</p>
+    <p class="small">Firme dentro del recuadro</p>
     <div id="signature-container">
       <canvas id="signature-pad"></canvas>
     </div>
 
     <div class="buttons">
       <button type="button" class="btn-clear" id="clear-btn">Borrar firma</button>
-      <button type="button" class="btn-save" id="submit-btn">Enviar formulario</button>
+      <button type="button" class="btn-save" id="submit-btn">Enviar</button>
     </div>
 
     <div class="output" id="output"></div>
 
     <div class="preview" id="preview" style="display:none;">
       <p>Vista previa de la firma:</p>
-      <img id="signature-image" alt="Firma guardada" />
+      <img id="signature-image" alt="Firma" />
     </div>
   </div>
+
+  <!-- ========================= JS FINAL ========================= -->
 
   <script>
     const canvas = document.getElementById("signature-pad");
@@ -335,30 +298,39 @@
       const container = document.getElementById("signature-container");
       canvas.width = container.clientWidth * ratio;
       canvas.height = container.clientHeight * ratio;
-      const ctx = canvas.getContext("2d");
-      ctx.scale(ratio, ratio);
+      canvas.getContext("2d").scale(ratio, ratio);
     }
 
     window.addEventListener("resize", resizeCanvas);
     resizeCanvas();
 
     const signaturePad = new SignaturePad(canvas, {
-      backgroundColor: "rgba(255,255,255,1)",
-      penColor: "black",
+      backgroundColor: "white",
+      penColor: "black"
     });
 
     clearBtn.addEventListener("click", () => {
       signaturePad.clear();
-      output.textContent = "";
       preview.style.display = "none";
     });
 
-    // DEMO: solo muestra datos en pantalla
+    function dataURLToBlob(dataURL) {
+      const parts = dataURL.split(",");
+      const mime = parts[0].match(/:(.*?);/)[1];
+      const bstr = atob(parts[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) u8arr[n] = bstr.charCodeAt(n);
+      return new Blob([u8arr], { type: mime });
+    }
+
+    // IMPORTANTISIMO: tu URL del Web App
+    const WEBAPP_URL = "https://script.google.com/macros/library/d/175tzbAZz65sS_OTioobzt2LXdEH1HbieX05LO_T4kZ2R5_12df1MuABd/2";
+
     submitBtn.addEventListener("click", () => {
       const cliente = document.getElementById("cliente").value.trim();
       const telefono = document.getElementById("telefono").value.trim();
       const marca = document.getElementById("marca").value.trim();
-      // 🔹 ahora leemos modelo + año desde un solo input
       const modeloAnio = document.getElementById("modeloAnio").value.trim();
       const placa = document.getElementById("placa").value.trim();
       const color = document.getElementById("color").value.trim();
@@ -366,12 +338,12 @@
       const observaciones = document.getElementById("observaciones").value.trim();
 
       if (!cliente || !telefono || !marca || !modeloAnio || !placa) {
-        alert("Por favor, completa al menos los datos básicos del cliente y vehículo.");
+        alert("Completa todos los datos obligatorios");
         return;
       }
 
       if (signaturePad.isEmpty()) {
-        alert("Por favor, pide al cliente que firme antes de enviar.");
+        alert("La firma es obligatoria");
         return;
       }
 
@@ -380,34 +352,58 @@
       ).map(el => el.value);
 
       const fotosInput = document.getElementById("fotos");
-      const fotosArchivos = Array.from(fotosInput.files || []);
-      const fotosNombres = fotosArchivos.map(f => f.name);
+      const fotosArchivos = Array.from(fotosInput.files);
 
-      const firmaDataURL = signaturePad.toDataURL("image/png");
+      const formData = new FormData();
 
-      const payload = {
-        fecha: new Date().toISOString(),
-        cliente,
-        telefono,
-        marca,
-        modeloAnio,   // 🔹 un solo campo combinado
-        placa,
-        color,
-        trabajo,
-        observaciones,
-        elementosVerificados: elementos,
-        fotos: fotosNombres,
-        firma: firmaDataURL
-      };
+      // Campos de texto
+      formData.append("cliente", cliente);
+      formData.append("telefono", telefono);
+      formData.append("marca", marca);
+      formData.append("modelo", modeloAnio);
+      formData.append("placa", placa);
+      formData.append("color", color);
+      formData.append("trabajo", trabajo);
+      formData.append("observaciones", observaciones);
+      formData.append("elementosVerificados", elementos.join(", "));
 
-      output.textContent =
-        "Datos recopilados (listos para enviar a Apps Script / backend):\n\n" +
-        JSON.stringify(payload, null, 2);
+      // Fotos
+      fotosArchivos.forEach((file, index) => {
+        formData.append(`foto_${index}`, file);
+      });
 
+      // Firma
+      const firmaDataURL = signaturePad.toDataURL();
+      const firmaBlob = dataURLToBlob(firmaDataURL);
+      formData.append("firma", firmaBlob, `firma_${Date.now()}.png`);
+
+      // Vista previa
       signatureImage.src = firmaDataURL;
       preview.style.display = "block";
 
-      console.log("Payload listo:", payload);
+      output.textContent = "Enviando datos al servidor...";
+
+      // Enviar
+      fetch(WEBAPP_URL, {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        output.textContent =
+          "Respuesta del servidor:\n\n" + JSON.stringify(data, null, 2);
+
+        if (data.status === "ok") {
+          alert("Formulario enviado correctamente ✔️");
+        } else {
+          alert("Error al guardar ❌");
+        }
+      })
+      .catch(err => {
+        output.textContent = "Error:\n" + err;
+        alert("Conexión fallida ❌");
+      });
+
     });
   </script>
 </body>
