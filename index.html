@@ -39,6 +39,29 @@
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
       border: 1px solid #333;
     }
+    /* LOGO - ESTILO RESPONSIVO */
+.header-logo {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* Estilo base (celular) */
+.header-logo img {
+  width: 100%;
+  max-width: 420px;
+  display: block;
+  margin: 0 auto 10px;
+  border-radius: 6px;
+}
+
+/* Tablet y arriba */
+@media (min-width: 768px) {
+  .header-logo img {
+    max-width: 520px;
+    transform: translateX(2%); /* mueve un poquito a la derecha */
+  }
+}
+
 
     .small {
       font-size: 0.75rem;
@@ -187,10 +210,6 @@
          alt="LFP Soluciones Automotrices"
          style="width:95%; max-width:480px; margin-bottom:10px; border-radius:6px;">
   </div>
-
-  <h1>Recepción de Vehículo</h1>
-
-  <h1>Recepción de Vehículo</h1>
 
     <h1>Recepción de Vehículo</h1>
     <p class="small">LFP SRL · Formulario digital</p>
@@ -419,6 +438,7 @@
   </script>
 </body>
 </html>
+
 
 
 
