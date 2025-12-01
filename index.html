@@ -39,29 +39,27 @@
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
       border: 1px solid #333;
     }
-    /* LOGO - ESTILO RESPONSIVO */
-.header-logo {
-  text-align: center;
-  margin-bottom: 16px;
-}
 
-/* Estilo base (celular) */
-.header-logo img {
-  width: 100%;
-  max-width: 420px;
-  display: block;
-  margin: 0 auto 10px;
-  border-radius: 6px;
-}
+    /* LOGO RESPONSIVO */
+    .header-logo {
+      text-align: center;
+      margin-bottom: 16px;
+    }
 
-/* Tablet y arriba */
-@media (min-width: 768px) {
-  .header-logo img {
-    max-width: 520px;
-    transform: translateX(2%); /* mueve un poquito a la derecha */
-  }
-}
+    .header-logo img {
+      width: 100%;
+      max-width: 420px;
+      display: block;
+      margin: 0 auto 10px;
+      border-radius: 6px;
+    }
 
+    @media (min-width: 768px) {
+      .header-logo img {
+        max-width: 520px;
+        transform: translateX(2%);
+      }
+    }
 
     .small {
       font-size: 0.75rem;
@@ -115,7 +113,6 @@
       box-shadow: 0 0 0 1px #e50914;
     }
 
-    /* Checklist */
     .checklist {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -205,11 +202,9 @@
 <body>
   <div class="card">
 
-  <div class="header-logo">
-    <img src="lfp-logo.jpg" 
-         alt="LFP Soluciones Automotrices"
-         style="width:95%; max-width:480px; margin-bottom:10px; border-radius:6px;">
-  </div>
+    <div class="header-logo">
+      <img src="lfp-logo.jpg" alt="LFP Soluciones Automotrices">
+    </div>
 
     <h1>Recepción de Vehículo</h1>
     <p class="small">LFP SRL · Formulario digital</p>
@@ -222,7 +217,7 @@
     </div>
     <div class="field">
       <div class="label">Teléfono</div>
-      <input type="tel" id="telefono" placeholder="Ej: 7xxxxxxx" />
+      <input type="tel" id="telefono" placeholder="Ej: +591 7xxxxxxx" />
     </div>
 
     <!-- DATOS DEL VEHÍCULO -->
@@ -234,7 +229,7 @@
       </div>
       <div class="field half">
         <div class="label">Modelo / Año</div>
-        <input type="text" id="modeloAnio" placeholder="Ej: Hilux 2024" />
+        <input type="text" id="modeloAnio" placeholder="Ej: Hilux 2025" />
       </div>
     </div>
 
@@ -291,6 +286,7 @@
     <h2>Fotos del vehículo</h2>
     <div class="field">
       <input type="file" id="fotos" accept="image/*" multiple />
+      <p class="small">Máximo 3 fotos por registro.</p>
     </div>
 
     <!-- FIRMA -->
@@ -313,148 +309,145 @@
     </div>
   </div>
 
-  <!-- ========================= JS FINAL ========================= -->
-
   <script>
-    <script>
-  const canvas = document.getElementById("signature-pad");
-  const clearBtn = document.getElementById("clear-btn");
-  const submitBtn = document.getElementById("submit-btn");
-  const output = document.getElementById("output");
-  const preview = document.getElementById("preview");
-  const signatureImage = document.getElementById("signature-image");
+    const canvas = document.getElementById("signature-pad");
+    const clearBtn = document.getElementById("clear-btn");
+    const submitBtn = document.getElementById("submit-btn");
+    const output = document.getElementById("output");
+    const preview = document.getElementById("preview");
+    const signatureImage = document.getElementById("signature-image");
 
-  function resizeCanvas() {
-    const ratio = Math.max(window.devicePixelRatio || 1, 1);
-    const container = document.getElementById("signature-container");
-    canvas.width = container.clientWidth * ratio;
-    canvas.height = container.clientHeight * ratio;
-    canvas.getContext("2d").scale(ratio, ratio);
-  }
+    function resizeCanvas() {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      const container = document.getElementById("signature-container");
+      canvas.width = container.clientWidth * ratio;
+      canvas.height = container.clientHeight * ratio;
+      canvas.getContext("2d").scale(ratio, ratio);
+    }
 
-  window.addEventListener("resize", resizeCanvas);
-  resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
 
-  const signaturePad = new SignaturePad(canvas, {
-    backgroundColor: "white",
-    penColor: "black"
-  });
-
-  clearBtn.addEventListener("click", () => {
-    signaturePad.clear();
-    preview.style.display = "none";
-  });
-
-  function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result || "";
-        const base64 = result.toString().split(",")[1]; // quitamos "data:...;base64,"
-        resolve(base64);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
+    const signaturePad = new SignaturePad(canvas, {
+      backgroundColor: "white",
+      penColor: "black"
     });
-  }
 
-  // URL de tu WebApp (exec)
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz8ZpeyVMGMt__DjCqrUE-LVK9eEy-0Idk4lXblpSAZX1elkeXd29TL0hYKAy89uUF/exec"; // <-- la tuya
+    clearBtn.addEventListener("click", () => {
+      signaturePad.clear();
+      preview.style.display = "none";
+    });
 
-  submitBtn.addEventListener("click", async () => {
-    const cliente = document.getElementById("cliente").value.trim();
-    const telefono = document.getElementById("telefono").value.trim();
-    const marca = document.getElementById("marca").value.trim();
-    const modeloAnio = document.getElementById("modeloAnio").value.trim();
-    const placa = document.getElementById("placa").value.trim();
-    const color = document.getElementById("color").value.trim();
-    const trabajo = document.getElementById("trabajo").value.trim();
-    const observaciones = document.getElementById("observaciones").value.trim();
-
-    if (!cliente || !telefono || !marca || !modeloAnio || !placa) {
-      alert("Completa todos los datos obligatorios");
-      return;
-    }
-
-    if (signaturePad.isEmpty()) {
-      alert("La firma es obligatoria");
-      return;
-    }
-
-    const elementos = Array.from(
-      document.querySelectorAll('input[name="elementos"]:checked')
-    ).map(el => el.value);
-
-    const fotosInput = document.getElementById("fotos");
-    const fotosArchivos = Array.from(fotosInput.files || []);
-
-    const formData = new FormData();
-
-    // Campos de texto
-    formData.append("cliente", cliente);
-    formData.append("telefono", telefono);
-    formData.append("marca", marca);
-    formData.append("modelo", modeloAnio);
-    formData.append("placa", placa);
-    formData.append("color", color);
-    formData.append("trabajo", trabajo);
-    formData.append("observaciones", observaciones);
-    formData.append("elementosVerificados", elementos.join(", "));
-
-    // Fotos -> base64 (máx 3)
-    const maxFotos = Math.min(fotosArchivos.length, 3);
-    for (let i = 0; i < maxFotos; i++) {
-      const file = fotosArchivos[i];
-      const base64 = await fileToBase64(file);
-      formData.append(`foto_${i}_b64`, base64);
-      formData.append(`foto_${i}_name`, file.name || `foto_${i + 1}.jpg`);
-      formData.append(`foto_${i}_type`, file.type || "image/jpeg");
-    }
-
-    // Firma -> base64
-    const firmaDataURL = signaturePad.toDataURL("image/png");
-    const firmaBase64 = firmaDataURL.split(",")[1];
-    formData.append("firma_b64", firmaBase64);
-    formData.append("firma_name", `firma_${Date.now()}.png`);
-
-    // Vista previa firma
-    signatureImage.src = firmaDataURL;
-    preview.style.display = "block";
-
-    output.textContent = "Enviando datos al servidor...";
-
-    try {
-      const res = await fetch(WEBAPP_URL, {
-        method: "POST",
-        body: formData
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result || "";
+          const base64 = result.toString().split(",")[1];
+          resolve(base64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
-
-      const text = await res.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch (e) {
-        throw new Error("Respuesta no JSON: " + text);
-      }
-
-      output.textContent =
-        "Respuesta del servidor:\n\n" + JSON.stringify(data, null, 2);
-
-      if (data.status === "ok") {
-        alert("Formulario enviado correctamente ✔️");
-      } else {
-        alert("Error al guardar ❌");
-      }
-    } catch (err) {
-      console.error("Error en fetch:", err);
-      output.textContent = "Error:\n" + err;
-      alert("Conexión fallida ❌");
     }
-  });
-</script>
 
+    // PON AQUÍ TU URL DEL WEB APP (EXEC)
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz8ZpeyVMGMt__DjCqrUE-LVK9eEy-0ldk4IXbIpSAZx1elkeXd29TL0hYKAyg89uuF/exec";
+
+    submitBtn.addEventListener("click", async () => {
+      const cliente = document.getElementById("cliente").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const marca = document.getElementById("marca").value.trim();
+      const modeloAnio = document.getElementById("modeloAnio").value.trim();
+      const placa = document.getElementById("placa").value.trim();
+      const color = document.getElementById("color").value.trim();
+      const trabajo = document.getElementById("trabajo").value.trim();
+      const observaciones = document.getElementById("observaciones").value.trim();
+
+      if (!cliente || !telefono || !marca || !modeloAnio || !placa) {
+        alert("Completa todos los datos obligatorios");
+        return;
+      }
+
+      if (signaturePad.isEmpty()) {
+        alert("La firma es obligatoria");
+        return;
+      }
+
+      const elementos = Array.from(
+        document.querySelectorAll('input[name="elementos"]:checked')
+      ).map(el => el.value);
+
+      const fotosInput = document.getElementById("fotos");
+      const fotosArchivos = Array.from(fotosInput.files || []);
+
+      const formData = new FormData();
+
+      // Campos de texto
+      formData.append("cliente", cliente);
+      formData.append("telefono", telefono);
+      formData.append("marca", marca);
+      formData.append("modelo", modeloAnio);
+      formData.append("placa", placa);
+      formData.append("color", color);
+      formData.append("trabajo", trabajo);
+      formData.append("observaciones", observaciones);
+      formData.append("elementosVerificados", elementos.join(", "));
+
+      // FOTOS → BASE64 (solo 3 primeras)
+      const maxFotos = Math.min(fotosArchivos.length, 3);
+      for (let i = 0; i < maxFotos; i++) {
+        const file = fotosArchivos[i];
+        const base64 = await fileToBase64(file);
+        formData.append(`foto_${i}_b64`, base64);
+        formData.append(`foto_${i}_name`, file.name || `foto_${i + 1}.jpg`);
+        formData.append(`foto_${i}_type`, file.type || "image/jpeg");
+      }
+
+      // FIRMA → BASE64
+      const firmaDataURL = signaturePad.toDataURL("image/png");
+      const firmaBase64 = firmaDataURL.split(",")[1];
+      formData.append("firma_b64", firmaBase64);
+      formData.append("firma_name", `firma_${Date.now()}.png`);
+
+      signatureImage.src = firmaDataURL;
+      preview.style.display = "block";
+
+      output.textContent = "Enviando datos al servidor...";
+
+      try {
+        const res = await fetch(WEBAPP_URL, {
+          method: "POST",
+          body: formData
+        });
+
+        const text = await res.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (e) {
+          throw new Error("Respuesta no JSON: " + text);
+        }
+
+        output.textContent =
+          "Respuesta del servidor:\n\n" + JSON.stringify(data, null, 2);
+
+        if (data.status === "ok") {
+          alert("Formulario enviado correctamente ✔️");
+        } else {
+          alert("Error al guardar ❌");
+        }
+      } catch (err) {
+        console.error("Error en fetch:", err);
+        output.textContent = "Error:\n" + err;
+        alert("Conexión fallida ❌");
+      }
+    });
+  </script>
 </body>
 </html>
+
+
 
 
 
