@@ -1,441 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Recepción de Vehículo - LFP SRL</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Signature Pad desde CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-
-  <style>
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      margin: 0;
-      padding: 16px;
-      background: #111;
-      color: #fff;
-    }
-
-    h1 {
-      font-size: 1.4rem;
-      margin-bottom: 4px;
-    }
-
-    h2 {
-      font-size: 1.05rem;
-      margin-top: 18px;
-      margin-bottom: 6px;
-      border-bottom: 1px solid #333;
-      padding-bottom: 4px;
-    }
-
-    .card {
-      max-width: 520px;
-      margin: 0 auto;
-      background: #181818;
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
-      border: 1px solid #333;
-    }
-
-    /* LOGO RESPONSIVO */
-    .header-logo {
-      text-align: center;
-      margin-bottom: 16px;
-    }
-
-    .header-logo img {
-      width: 100%;
-      max-width: 420px;
-      display: block;
-      margin: 0 auto 10px;
-      border-radius: 6px;
-    }
-
-    @media (min-width: 768px) {
-      .header-logo img {
-        max-width: 520px;
-        transform: translateX(2%);
-      }
-    }
-
-    .small {
-      font-size: 0.75rem;
-      color: #888;
-      margin-top: 4px;
-    }
-
-    .label {
-      font-size: 0.85rem;
-      margin-bottom: 4px;
-      color: #ddd;
-    }
-
-    .field {
-      margin-bottom: 10px;
-      width: 100%;
-    }
-
-    .input-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .half {
-      flex: 1;
-      min-width: 48%;
-    }
-
-    input,
-    textarea {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid #333;
-      background: #101010;
-      color: #fff;
-      font-size: 0.9rem;
-      box-sizing: border-box;
-    }
-
-    textarea {
-      min-height: 70px;
-      resize: vertical;
-    }
-
-    input:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #e50914;
-      box-shadow: 0 0 0 1px #e50914;
-    }
-
-    .checklist {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 4px 12px;
-      margin-top: 6px;
-    }
-
-    .check-item {
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: #ddd;
-    }
-
-    .check-item input {
-      width: auto;
-      margin: 0;
-    }
-
-    #signature-container {
-      border: 1px solid #444;
-      border-radius: 8px;
-      background: #fff;
-      overflow: hidden;
-      position: relative;
-      height: 220px;
-      margin-top: 6px;
-    }
-
-    canvas {
-      width: 100%;
-      height: 100%;
-      touch-action: none;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-
-    .btn-clear {
-      background: #333;
-      color: #fff;
-      flex: 1;
-    }
-
-    .btn-save {
-      background: #e50914;
-      color: #fff;
-      flex: 2;
-    }
-
-    .output {
-      margin-top: 14px;
-      font-size: 0.8rem;
-      word-break: break-all;
-      color: #aaa;
-      white-space: pre-wrap;
-    }
-
-    .preview {
-      margin-top: 12px;
-      background: #fff;
-      border-radius: 8px;
-      padding: 8px;
-      text-align: center;
-    }
-
-    .preview img {
-      max-width: 100%;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>TEST conexión WebApp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+<body style="background:#111;color:#fff;font-family:sans-serif;padding:16px;">
+  <h1>TEST conexión WebApp</h1>
 
-<body>
-  <div class="card">
+  <p>Al hacer clic en el botón, se hará un POST al WebApp y se mostrará la respuesta abajo.</p>
 
-    <div class="header-logo">
-      <img src="lfp-logo.jpg" alt="LFP Soluciones Automotrices">
-    </div>
+  <button id="btn" style="padding:8px 14px;border-radius:999px;border:none;cursor:pointer;">
+    Probar conexión
+  </button>
 
-    <h1>Recepción de Vehículo TEST</h1>
-    <p class="small">LFP SRL · Formulario digital</p>
-
-    <!-- DATOS DEL CLIENTE -->
-    <h2>Datos del Cliente</h2>
-    <div class="field">
-      <div class="label">Nombre del cliente</div>
-      <input type="text" id="cliente" placeholder="Ej: Juan Pérez" />
-    </div>
-    <div class="field">
-      <div class="label">Teléfono</div>
-      <input type="tel" id="telefono" placeholder="Ej: +591 7xxxxxxx" />
-    </div>
-
-    <!-- DATOS DEL VEHÍCULO -->
-    <h2>Datos del Vehículo</h2>
-    <div class="input-row">
-      <div class="field half">
-        <div class="label">Marca</div>
-        <input type="text" id="marca" placeholder="Ej: Toyota" />
-      </div>
-      <div class="field half">
-        <div class="label">Modelo / Año</div>
-        <input type="text" id="modeloAnio" placeholder="Ej: Hilux 2025" />
-      </div>
-    </div>
-
-    <div class="input-row">
-      <div class="field half">
-        <div class="label">Placa</div>
-        <input type="text" id="placa" placeholder="Ej: 1234-ABC" />
-      </div>
-      <div class="field half">
-        <div class="label">Color</div>
-        <input type="text" id="color" placeholder="Ej: Blanco" />
-      </div>
-    </div>
-
-    <!-- ELEMENTOS VERIFICADOS -->
-    <h2>Elementos verificados</h2>
-    <p class="small">Seleccione los elementos revisados</p>
-    <div class="checklist">
-      <label class="check-item"><input type="checkbox" name="elementos" value="Viseras" />Viseras</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Retrovisores" />Retrovisores</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Lateral derecho" />Lateral derecho</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Lateral izquierdo" />Lateral izquierdo</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Laterales posteriores" />Laterales posteriores</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Herramienta" />Herramienta</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Limpiaparabrisas" />Limpiaparabrisas</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Llanta auxiliar" />Llanta auxiliar</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Tapa aros" />Tapa aros</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Espejo interior" />Espejo interior</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Antena" />Antena</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Pintura" />Pintura</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Faroles" />Faroles</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Equipo de sonido" />Equipo de sonido</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Asientos" />Asientos</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Cenicero" />Cenicero</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Gato" />Gato</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Cinturones" />Cinturones</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Batería" />Batería</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="USB" />USB</label>
-    </div>
-
-    <!-- TRABAJO -->
-    <h2>Trabajo a realizar</h2>
-    <div class="field">
-      <textarea id="trabajo" placeholder="Ej: Nano cerámico, PPF, etc."></textarea>
-    </div>
-
-    <!-- OBSERVACIONES -->
-    <h2>Observaciones</h2>
-    <div class="field">
-      <textarea id="observaciones" placeholder="Golpes, rayones, etc."></textarea>
-    </div>
-
-    <!-- FOTOS -->
-    <h2>Fotos del vehículo</h2>
-    <div class="field">
-      <input type="file" id="fotos" accept="image/*" multiple />
-      <p class="small">Máximo 3 fotos por registro.</p>
-    </div>
-
-    <!-- FIRMA -->
-    <h2>Firma del Cliente</h2>
-    <p class="small">Firme dentro del recuadro</p>
-    <div id="signature-container">
-      <canvas id="signature-pad"></canvas>
-    </div>
-
-    <div class="buttons">
-      <button type="button" class="btn-clear" id="clear-btn">Borrar firma</button>
-      <button type="button" class="btn-save" id="submit-btn">Enviar</button>
-    </div>
-
-    <div class="output" id="output"></div>
-
-    <div class="preview" id="preview" style="display:none;">
-      <p>Vista previa de la firma:</p>
-      <img id="signature-image" alt="Firma" />
-    </div>
-  </div>
+  <pre id="output" style="margin-top:16px;background:#222;padding:10px;border-radius:8px;white-space:pre-wrap;"></pre>
 
   <script>
-    const canvas = document.getElementById("signature-pad");
-    const clearBtn = document.getElementById("clear-btn");
-    const submitBtn = document.getElementById("submit-btn");
+    // PON AQUÍ EXACTAMENTE LA URL /exec QUE VISTE EN EL NAVEGADOR
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbypIYAGehLO7E1-9BSv5C0Rfd3Bs3Sl5YqeyXU1RYHVXpAaZFugBpn3OataUx_kn7K/exec"; 
+
+    const btn = document.getElementById("btn");
     const output = document.getElementById("output");
-    const preview = document.getElementById("preview");
-    const signatureImage = document.getElementById("signature-image");
 
-    function resizeCanvas() {
-      const ratio = Math.max(window.devicePixelRatio || 1, 1);
-      const container = document.getElementById("signature-container");
-      canvas.width = container.clientWidth * ratio;
-      canvas.height = container.clientHeight * ratio;
-      canvas.getContext("2d").scale(ratio, ratio);
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    const signaturePad = new SignaturePad(canvas, {
-      backgroundColor: "white",
-      penColor: "black"
-    });
-
-    clearBtn.addEventListener("click", () => {
-      signaturePad.clear();
-      preview.style.display = "none";
-    });
-
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = reader.result || "";
-          const base64 = result.toString().split(",")[1];
-          resolve(base64);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    // PON AQUÍ TU URL DEL WEB APP (EXEC)
-    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyplYIAGehLO7E1-9BSv5C0Rfd3Bs3Sl5YqeyXU1RYHVXpAaZFugBpn3OataUx_kn7K/exec";
-
-    submitBtn.addEventListener("click", async () => {
-      const cliente = document.getElementById("cliente").value.trim();
-      const telefono = document.getElementById("telefono").value.trim();
-      const marca = document.getElementById("marca").value.trim();
-      const modeloAnio = document.getElementById("modeloAnio").value.trim();
-      const placa = document.getElementById("placa").value.trim();
-      const color = document.getElementById("color").value.trim();
-      const trabajo = document.getElementById("trabajo").value.trim();
-      const observaciones = document.getElementById("observaciones").value.trim();
-
-      if (!cliente || !telefono || !marca || !modeloAnio || !placa) {
-        alert("Completa todos los datos obligatorios");
-        return;
-      }
-
-      if (signaturePad.isEmpty()) {
-        alert("La firma es obligatoria");
-        return;
-      }
-
-      const elementos = Array.from(
-        document.querySelectorAll('input[name="elementos"]:checked')
-      ).map(el => el.value);
-
-      const fotosInput = document.getElementById("fotos");
-      const fotosArchivos = Array.from(fotosInput.files || []);
+    btn.addEventListener("click", async () => {
+      output.textContent = "Enviando...";
 
       const formData = new FormData();
+      formData.append("cliente", "PRUEBA");
+      formData.append("telefono", "123456");
 
-      // Campos de texto
-      formData.append("cliente", cliente);
-      formData.append("telefono", telefono);
-      formData.append("marca", marca);
-      formData.append("modelo", modeloAnio);
-      formData.append("placa", placa);
-      formData.append("color", color);
-      formData.append("trabajo", trabajo);
-      formData.append("observaciones", observaciones);
-      formData.append("elementosVerificados", elementos.join(", "));
-
-      // FOTOS → BASE64 (solo 3 primeras)
-      const maxFotos = Math.min(fotosArchivos.length, 3);
-      for (let i = 0; i < maxFotos; i++) {
-        const file = fotosArchivos[i];
-        const base64 = await fileToBase64(file);
-        formData.append(`foto_${i}_b64`, base64);
-        formData.append(`foto_${i}_name`, file.name || `foto_${i + 1}.jpg`);
-        formData.append(`foto_${i}_type`, file.type || "image/jpeg");
-      }
-
-      // FIRMA → BASE64
-      const firmaDataURL = signaturePad.toDataURL("image/png");
-      const firmaBase64 = firmaDataURL.split(",")[1];
-      formData.append("firma_b64", firmaBase64);
-      formData.append("firma_name", `firma_${Date.now()}.png`);
-
-      signatureImage.src = firmaDataURL;
-      preview.style.display = "block";
-
-      output.textContent = "Enviando datos al servidor...";
-
-           try {
+      try {
         const res = await fetch(WEBAPP_URL, {
           method: "POST",
-          body: formData
+          body: formData,
         });
 
         const text = await res.text();
         output.textContent = "Respuesta cruda del servidor:\n\n" + text;
-
-        // No intentamos parsear JSON ni nada, solo mostramos lo que vuelve
-        alert("Petición enviada, revisa el recuadro de respuesta.");
       } catch (err) {
-        console.error("Error en fetch:", err);
         output.textContent = "Error en fetch:\n" + err;
-        alert("Conexión fallida ❌ (fetch)");
+        alert("Conexión fallida (fetch)");
+        console.error(err);
       }
-
     });
   </script>
 </body>
 </html>
+
 
 
 
