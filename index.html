@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    * ,
+    *,
     *::before,
     *::after {
       box-sizing: border-box;
@@ -19,9 +19,11 @@
     body {
       font-family: "Inter", sans-serif;
       margin: 0;
-      padding: 16px;
-      background: #0d0d0d;
+      padding: 16px 12px;
+      background: #050505;
       color: #fff;
+      display: flex;
+      justify-content: center;
     }
 
     h1, h2 {
@@ -43,33 +45,40 @@
     }
 
     .card {
-      max-width: 520px;
-      margin: 0 auto;
+      width: 100%;
+      max-width: 480px;        /* un poco más estrecho */
+      margin: 8px auto 24px;
       background: #181818;
-      border-radius: 16px;
-      padding: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
-      border: 1px solid #333;
+      border-radius: 18px;
+      padding: 20px 16px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
+      border: 1px solid #262626;
     }
 
     /* LOGO RESPONSIVO */
     .header-logo {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .header-logo img {
       width: 100%;
-      max-width: 420px;
+      max-width: 360px;
       display: block;
-      margin: 0 auto 10px;
-      border-radius: 6px;
+      margin: 0 auto 8px;
+      border-radius: 8px;
     }
 
     @media (min-width: 768px) {
+      body {
+        padding: 32px 24px;
+      }
+      .card {
+        border-radius: 20px;
+        padding: 24px 20px;
+      }
       .header-logo img {
-        max-width: 520px;
-        transform: translateX(2%);
+        max-width: 420px;
       }
     }
 
@@ -87,7 +96,7 @@
     }
 
     .field {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       width: 100%;
     }
 
@@ -369,7 +378,6 @@
       });
     }
 
-    // PON AQUÍ TU URL DEL WEB APP (EXEC)
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxFJLc70KOrQHGV5hzqSz2lXxchsHUwXIQ0ewLhJfcxmtSu4A7NGMTzp0HoTnIDAHPDBg/exec";
 
     submitBtn.addEventListener("click", async () => {
@@ -401,7 +409,6 @@
 
       const formData = new FormData();
 
-      // Campos de texto
       formData.append("cliente", cliente);
       formData.append("telefono", telefono);
       formData.append("marca", marca);
@@ -412,7 +419,6 @@
       formData.append("observaciones", observaciones);
       formData.append("elementosVerificados", elementos.join(", "));
 
-      // FOTOS → BASE64 (solo 3 primeras)
       const maxFotos = Math.min(fotosArchivos.length, 3);
       for (let i = 0; i < maxFotos; i++) {
         const file = fotosArchivos[i];
@@ -422,7 +428,6 @@
         formData.append(`foto_${i}_type`, file.type || "image/jpeg");
       }
 
-      // FIRMA → BASE64
       const firmaDataURL = signaturePad.toDataURL("image/png");
       const firmaBase64 = firmaDataURL.split(",")[1];
       formData.append("firma_b64", firmaBase64);
@@ -448,7 +453,6 @@
         alert("Conexión fallida ❌ (fetch)");
       }
 
-      // Limpiar formulario
       document.getElementById("cliente").value = "";
       document.getElementById("telefono").value = "";
       document.getElementById("marca").value = "";
@@ -461,7 +465,6 @@
       signaturePad.clear();
       preview.style.display = "none";
 
-      // Desmarcar checkboxes
       document
         .querySelectorAll('input[name="elementos"]:checked')
         .forEach(el => (el.checked = false));
