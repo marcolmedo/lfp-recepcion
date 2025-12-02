@@ -30,23 +30,32 @@
       formData.append("cliente", "PRUEBA");
       formData.append("telefono", "123456");
 
-      try {
+            try {
         const res = await fetch(WEBAPP_URL, {
           method: "POST",
           body: formData,
+          mode: "no-cors"   // 👈 CLAVE
         });
 
-        const text = await res.text();
-        output.textContent = "Respuesta cruda del servidor:\n\n" + text;
+        // En no-cors la respuesta es "opaca", no se puede leer.
+        output.textContent =
+          "Petición enviada en mode: no-cors.\n" +
+          "No podemos ver la respuesta, pero si no hubo error aquí,\n" +
+          "el WebApp recibió los datos.\n\n" +
+          "Revisa tu Google Sheet / Drive para confirmarlo.";
+
+        alert("Conexión OK (no-cors). Revisa el Sheet/Drive.");
       } catch (err) {
+        console.error("Error en fetch:", err);
         output.textContent = "Error en fetch:\n" + err;
-        alert("Conexión fallida (fetch)");
-        console.error(err);
+        alert("Conexión fallida ❌ (fetch)");
       }
+
     });
   </script>
 </body>
 </html>
+
 
 
 
