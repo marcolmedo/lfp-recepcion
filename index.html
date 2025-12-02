@@ -312,10 +312,20 @@
 
     <!-- FOTOS -->
     <h2>Fotos del vehículo</h2>
-    <div class="field">
-      <input type="file" id="fotos" accept="image/*" multiple />
-      <p class="small">Máximo 3 fotos por registro.</p>
+<div class="field">
+  <div class="file-input-wrapper" style="position: relative;">
+    <div class="file-input-display">
+      <div class="file-input-button">Seleccionar fotos</div>
+      <div class="file-input-text" id="file-label-text">
+        No has seleccionado fotos
+      </div>
     </div>
+    <!-- input real, invisible pero funcional -->
+    <input type="file" id="fotos" accept="image/*" multiple>
+  </div>
+  <p class="small">Máximo 3 fotos por registro.</p>
+</div>
+
 
     <!-- FIRMA -->
     <h2>Firma del Cliente</h2>
@@ -404,6 +414,20 @@
   opacity: 0;
   cursor: pointer;
 }
+    const fotosInput = document.getElementById("fotos");
+const fileLabelText = document.getElementById("file-label-text");
+
+fotosInput.addEventListener("change", () => {
+  const files = Array.from(fotosInput.files || []);
+  if (files.length === 0) {
+    fileLabelText.textContent = "No has seleccionado fotos";
+  } else if (files.length === 1) {
+    fileLabelText.textContent = files[0].name;
+  } else {
+    fileLabelText.textContent = `${files.length} fotos seleccionadas`;
+  }
+});
+
 
 
     function fileToBase64(file) {
@@ -445,7 +469,7 @@
         document.querySelectorAll('input[name="elementos"]:checked')
       ).map(el => el.value);
 
-      const fotosInput = document.getElementById("fotos");
+      
       const fotosArchivos = Array.from(fotosInput.files || []);
 
       const formData = new FormData();
@@ -513,6 +537,7 @@
   </script>
 </body>
 </html>
+
 
 
 
