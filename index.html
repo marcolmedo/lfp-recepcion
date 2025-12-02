@@ -364,6 +364,47 @@
       signaturePad.clear();
       preview.style.display = "none";
     });
+    .file-input-wrapper {
+  margin-top: 6px;
+}
+
+.file-input-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #0f0f0f;
+  border-radius: 12px;
+  border: 1px solid #222;
+  padding: 8px 10px;
+}
+
+.file-input-button {
+  background: #ffffff;
+  color: #000;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.file-input-text {
+  font-size: 0.85rem;
+  color: #ddd;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Ocultar el input real pero seguir siendo clickeable */
+.file-input-wrapper input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
 
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
@@ -472,6 +513,7 @@
   </script>
 </body>
 </html>
+
 
 
 
