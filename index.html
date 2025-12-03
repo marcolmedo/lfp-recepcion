@@ -276,6 +276,32 @@
       opacity: 0;
       cursor: pointer;
     }
+    /* ========== LOADER DE CARGA ========== */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loader {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #e50914;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
     /* ====== RESPONSIVO EN TABLET / PC ====== */
     @media (min-width: 768px) {
@@ -327,6 +353,11 @@
 <body>
   <!-- AUDIO PARA EL MENSAJE DE GRACIAS -->
   <audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
+
+  <div id="loading-overlay" class="loading-overlay">
+  <div class="loader"></div>
+</div>
+
 
   <div class="card">
 
@@ -455,6 +486,8 @@
     const fotosInput = document.getElementById("fotos");
     const fileLabelText = document.getElementById("file-label-text");
     const audioGracias = document.getElementById("audio-gracias");
+    const loadingOverlay = document.getElementById("loading-overlay");
+
 
     function resizeCanvas() {
       const ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -523,6 +556,10 @@
         alert("La firma es obligatoria");
         return;
       }
+      // Mostrar loader y desactivar botón de enviar
+if (loadingOverlay) loadingOverlay.style.display = "flex";
+submitBtn.disabled = true;
+
 
       const elementos = Array.from(
         document.querySelectorAll('input[name="elementos"]:checked')
@@ -555,33 +592,38 @@
       const firmaBase64 = firmaDataURL.split(",")[1];
       formData.append("firma_b64", firmaBase64);
       formData.append("firma_name", `firma_${Date.now()}.png`);
+      // Ya no mostramos la firma abajo
+      preview.style.display = "none";
+      output.textContent = "";
 
-      signatureImage.src = firmaDataURL;
-      preview.style.display = "block";
 
-      output.textContent = "Enviando datos al servidor...";
+     try {
+  await fetch(WEBAPP_URL, {
+    method: "POST",
+    body: formData,
+    mode: "no-cors"
+  });
 
-      try {
-        await fetch(WEBAPP_URL, {
-          method: "POST",
-          body: formData,
-          mode: "no-cors"
-        });
+  // Mensaje de éxito
+  output.textContent = "Formulario enviado correctamente ✔️";
 
-        output.textContent = "Formulario enviado correctamente ✔️";
+  // 🔊 Reproducir audio de agradecimiento
+  if (audioGracias) {
+    audioGracias.currentTime = 0;
+    audioGracias.play().catch(() => {});
+  }
 
-        // 🔊 Reproducir audio de agradecimiento
-        if (audioGracias) {
-          audioGracias.currentTime = 0;
-          audioGracias.play().catch(() => {});
-        }
+  alert("Formulario enviado correctamente ✔️");
+} catch (err) {
+  console.error("Error en fetch:", err);
+  output.textContent = "Error en fetch:\n" + err;
+  alert("Conexión fallida ❌ (fetch)");
+} finally {
+  // Apagar loader y habilitar botón SIEMPRE (éxito o error)
+  if (loadingOverlay) loadingOverlay.style.display = "none";
+  submitBtn.disabled = false;
+}
 
-        alert("Formulario enviado correctamente ✔️");
-      } catch (err) {
-        console.error("Error en fetch:", err);
-        output.textContent = "Error en fetch:\n" + err;
-        alert("Conexión fallida ❌ (fetch)");
-      }
 
       // Limpiar formulario
       document.getElementById("cliente").value = "";
@@ -603,6 +645,7 @@
   </script>
 </body>
 </html>
+
 
 
 
