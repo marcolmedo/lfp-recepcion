@@ -16,14 +16,33 @@
       box-sizing: border-box;
     }
 
-    body {
-      font-family: "Inter", sans-serif;
-      margin: 0;
-      padding: 16px 12px;
-      background: #050505;
-      color: #fff;
-      display: flex;
-      justify-content: center;
+  body {
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    padding: 16px 12px;
+    background: #050505;   /* color base */
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    position: relative;    /* necesario para el ::before */
+    overflow-x: hidden;
+}
+    /* Fondo tipo bandera de meta con el logo en diagonal */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -80px; /* se expande un poco fuera de la pantalla para que no se vean bordes raros */
+    background-image: url("lfp-watermark.png");
+    background-repeat: repeat;
+    background-size: 180px;      /* tamaño del logo repetido: prueba 140–220px */
+    opacity: 0.05;               /* intensidad del logo: sube a 0.08 si quieres verlo más */
+    transform: rotate(-25deg);   /* inclinación tipo bandera de meta */
+    transform-origin: center;
+    pointer-events: none;        /* no bloquea los clics */
+    z-index: -1;                 /* siempre por detrás del contenido */
+}
+
+
     }
 
     h1, h2 {
@@ -538,6 +557,7 @@
   </script>
 </body>
 </html>
+
 
 
 
