@@ -27,21 +27,26 @@
       position: relative;    /* necesario para el ::before */
       overflow-x: hidden;
     }
+    
 
     /* Fondo tipo bandera de meta con el logo en diagonal */
     body::before {
       content: "";
       position: fixed;
-      inset: -80px; /* se expande un poco fuera de la pantalla para que no se vean bordes raros */
+      top: -250px;
+      left: -250px;
+      right: -250px;
+      bottom: -250px;
       background-image: url("lfp-water.png");
       background-repeat: repeat;
-      background-size: 180px;      /* tamaño del logo repetido: prueba 140–220px */
-      opacity: 0.18;               /* intensidad del logo */
-      transform: rotate(-25deg);   /* inclinación tipo bandera de meta */
+      background-size: 180px;
+      opacity: 0.18;
+      transform: rotate(-25deg);
       transform-origin: center;
-      pointer-events: none;        /* no bloquea los clics */
-      z-index: -1;                 /* siempre por detrás del contenido */
-    }
+      pointer-events: none;
+      z-index: -1;
+    }              
+    
 
     h1, h2 {
       font-weight: 600;
@@ -598,6 +603,7 @@
   </script>
 </body>
 </html>
+
 
 
 
