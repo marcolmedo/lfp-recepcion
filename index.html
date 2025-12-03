@@ -537,6 +537,30 @@
         output.textContent = "Error en fetch:\n" + err;
         alert("Conexión fallida ❌ (fetch)");
       }
+      // --- Voz masculina profesional al enviar ---
+function reproducirAgradecimiento() {
+  const mensaje = new SpeechSynthesisUtterance(
+    "Gracias por confiar en LFP Soluciones Automotrices."
+  );
+  
+  // Seleccionar voz masculina si existe
+  const voces = speechSynthesis.getVoices();
+  const vozMasculina = voces.find(v =>
+    v.name.toLowerCase().includes("male") ||
+    v.name.toLowerCase().includes("man") ||
+    v.name.toLowerCase().includes("es-la") // voces en español latino
+  );
+
+  if (vozMasculina) mensaje.voice = vozMasculina;
+
+  mensaje.pitch = 0.9;   // tono más grave
+  mensaje.rate = 0.95;   // velocidad profesional
+
+  speechSynthesis.speak(mensaje);
+}
+      reproducirAgradecimiento();
+
+
 
       document.getElementById("cliente").value = "";
       document.getElementById("telefono").value = "";
@@ -557,6 +581,7 @@
   </script>
 </body>
 </html>
+
 
 
 
