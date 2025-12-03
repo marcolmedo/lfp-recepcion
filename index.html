@@ -8,43 +8,39 @@
   <!-- Signature Pad desde CDN -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
-
 
   <style>
-    * ,
+    *,
     *::before,
     *::after {
       box-sizing: border-box;
     }
 
-  body {
-    font-family: "Inter", sans-serif;
-    margin: 0;
-    padding: 16px 12px;
-    background: #050505;   /* color base */
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    position: relative;    /* necesario para el ::before */
-    overflow-x: hidden;
-}
+    body {
+      font-family: "Inter", sans-serif;
+      margin: 0;
+      padding: 16px 12px;
+      background: #050505;   /* color base */
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      position: relative;    /* necesario para el ::before */
+      overflow-x: hidden;
+    }
+
     /* Fondo tipo bandera de meta con el logo en diagonal */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: -80px; /* se expande un poco fuera de la pantalla para que no se vean bordes raros */
-    background-image: url("lfp-water.png");
-    background-repeat: repeat;
-    background-size: 180px;      /* tamaño del logo repetido: prueba 140–220px */
-    opacity: 0.18;               /* intensidad del logo: sube a 0.08 si quieres verlo más */
-    transform: rotate(-25deg);   /* inclinación tipo bandera de meta */
-    transform-origin: center;
-    pointer-events: none;        /* no bloquea los clics */
-    z-index: -1;                 /* siempre por detrás del contenido */
-
-
-
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -80px; /* se expande un poco fuera de la pantalla para que no se vean bordes raros */
+      background-image: url("lfp-water.png");
+      background-repeat: repeat;
+      background-size: 180px;      /* tamaño del logo repetido: prueba 140–220px */
+      opacity: 0.18;               /* intensidad del logo */
+      transform: rotate(-25deg);   /* inclinación tipo bandera de meta */
+      transform-origin: center;
+      pointer-events: none;        /* no bloquea los clics */
+      z-index: -1;                 /* siempre por detrás del contenido */
     }
 
     h1, h2 {
@@ -91,19 +87,6 @@
       border-radius: 8px;
     }
 
-    @media (min-width: 768px) {
-      body {
-        padding: 32px 24px;
-      }
-      .card {
-        border-radius: 20px;
-        padding: 24px 20px;
-      }
-      .header-logo img {
-        max-width: 420px;
-      }
-    }
-
     .small {
       font-size: 0.75rem;
       color: #b3b3b3;
@@ -128,9 +111,9 @@
       flex-wrap: wrap;
     }
 
+    /* Por defecto: una columna (celular) */
     .half {
-      flex: 1;
-      min-width: 48%;
+      flex: 1 1 100%;
     }
 
     input,
@@ -288,10 +271,58 @@
       opacity: 0;
       cursor: pointer;
     }
+
+    /* ====== RESPONSIVO EN TABLET / PC ====== */
+    @media (min-width: 768px) {
+      body {
+        padding: 40px 24px;
+      }
+
+      .card {
+        max-width: 640px;          /* más ancho en tablet / pc */
+        border-radius: 20px;
+        padding: 28px 24px;
+      }
+
+      .header-logo img {
+        max-width: 420px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.35rem;
+      }
+
+      .label,
+      .small {
+        font-size: 0.95rem;
+      }
+
+      input,
+      textarea {
+        font-size: 1rem;
+        padding: 14px 16px;
+      }
+
+      .check-item {
+        font-size: 0.95rem;
+      }
+
+      /* en pantallas grandes: dos columnas en los pares */
+      .half {
+        flex: 1 1 calc(50% - 4px);
+      }
+    }
   </style>
 </head>
 
 <body>
+  <!-- AUDIO PARA EL MENSAJE DE GRACIAS -->
+  <audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
+
   <div class="card">
 
     <div class="header-logo">
@@ -416,6 +447,9 @@
     const output = document.getElementById("output");
     const preview = document.getElementById("preview");
     const signatureImage = document.getElementById("signature-image");
+    const fotosInput = document.getElementById("fotos");
+    const fileLabelText = document.getElementById("file-label-text");
+    const audioGracias = document.getElementById("audio-gracias");
 
     function resizeCanvas() {
       const ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -439,9 +473,6 @@
     });
 
     // === LÓGICA DEL INPUT DE FOTOS PERSONALIZADO ===
-    const fotosInput = document.getElementById("fotos");
-    const fileLabelText = document.getElementById("file-label-text");
-
     fotosInput.addEventListener("change", () => {
       const files = Array.from(fotosInput.files || []);
       if (files.length === 0) {
@@ -533,21 +564,21 @@
         });
 
         output.textContent = "Formulario enviado correctamente ✔️";
+
+        // 🔊 Reproducir audio de agradecimiento
+        if (audioGracias) {
+          audioGracias.currentTime = 0;
+          audioGracias.play().catch(() => {});
+        }
+
         alert("Formulario enviado correctamente ✔️");
       } catch (err) {
         console.error("Error en fetch:", err);
         output.textContent = "Error en fetch:\n" + err;
         alert("Conexión fallida ❌ (fetch)");
       }
-      // const audioGracias = document.getElementById("audio-gracias");
-if (audioGracias) {
-  audioGracias.currentTime = 0;
-  audioGracias.play().catch(() => {});
-}
 
-
-
-
+      // Limpiar formulario
       document.getElementById("cliente").value = "";
       document.getElementById("telefono").value = "";
       document.getElementById("marca").value = "";
@@ -567,6 +598,8 @@ if (audioGracias) {
   </script>
 </body>
 </html>
+
+
 
 
 
