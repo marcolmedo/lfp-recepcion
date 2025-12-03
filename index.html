@@ -8,6 +8,8 @@
   <!-- Signature Pad desde CDN -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
+
 
   <style>
     * ,
@@ -537,28 +539,12 @@
         output.textContent = "Error en fetch:\n" + err;
         alert("Conexión fallida ❌ (fetch)");
       }
-      // --- Voz masculina profesional al enviar ---
-function reproducirAgradecimiento() {
-  const mensaje = new SpeechSynthesisUtterance(
-    "Gracias por confiar en LFP Soluciones Automotrices."
-  );
-  
-  // Seleccionar voz masculina si existe
-  const voces = speechSynthesis.getVoices();
-  const vozMasculina = voces.find(v =>
-    v.name.toLowerCase().includes("male") ||
-    v.name.toLowerCase().includes("man") ||
-    v.name.toLowerCase().includes("es-la") // voces en español latino
-  );
-
-  if (vozMasculina) mensaje.voice = vozMasculina;
-
-  mensaje.pitch = 0.9;   // tono más grave
-  mensaje.rate = 0.95;   // velocidad profesional
-
-  speechSynthesis.speak(mensaje);
+      // const audioGracias = document.getElementById("audio-gracias");
+if (audioGracias) {
+  audioGracias.currentTime = 0;
+  audioGracias.play().catch(() => {});
 }
-      reproducirAgradecimiento();
+
 
 
 
@@ -581,6 +567,7 @@ function reproducirAgradecimiento() {
   </script>
 </body>
 </html>
+
 
 
 
