@@ -307,11 +307,18 @@
 /* Logo centrado, quieto */
 .loader-logo {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  right: 14px;
-  bottom: 14px;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  max-width: 80%;     /* 🔥 fuerza a que se vea más pequeño */
+  max-height: 80%;
+  margin: auto;       /* centra perfectamente */
+}
+
 }
 
 }
@@ -326,15 +333,20 @@
 /* Más grande en tablet/PC */
 @media (min-width: 768px) {
   .loader-wrapper {
-    width: 160px;
-    height: 160px;
+    width: 150px;
+    height: 150px;
   }
 
- .loader-logo {
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
+  .loader-logo {
+    max-width: 70%;   /* más pequeño aún */
+    max-height: 70%;
+    top: 22px;
+    left: 22px;
+    right: 22px;
+    bottom: 22px;
+  }
+}
+
   }
 }
 
@@ -687,6 +699,7 @@ submitBtn.disabled = true;
   </script>
 </body>
 </html>
+
 
 
 
