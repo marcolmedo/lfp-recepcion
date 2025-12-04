@@ -27,7 +27,6 @@
       position: relative;    /* necesario para el ::before */
       overflow-x: hidden;
     }
-    
 
     /* Fondo tipo bandera de meta con el logo en diagonal */
     body::before {
@@ -45,8 +44,7 @@
       transform-origin: center;
       pointer-events: none;
       z-index: -1;
-    }              
-    
+    }
 
     h1, h2 {
       font-weight: 600;
@@ -69,7 +67,7 @@
 
     .card {
       width: 100%;
-      max-width: 480px;
+      max-width: 780px;                /* más ancho en tablet/pc */
       margin: 8px auto 24px;
       background: #181818;
       border-radius: 18px;
@@ -86,7 +84,7 @@
 
     .header-logo img {
       width: 100%;
-      max-width: 360px;
+      max-width: 420px;
       display: block;
       margin: 0 auto 8px;
       border-radius: 8px;
@@ -116,12 +114,10 @@
       flex-wrap: wrap;
     }
 
-    /* Por defecto: una columna (celular) */
-   .half {
-  flex: 1;
-  min-width: 48%;   /* así caben 2 por fila y se acomodan solos */
-}
-
+    /* dos columnas cuando haya .half dentro de .input-row */
+    .half {
+      flex: 1;
+      min-width: 48%;
     }
 
     input,
@@ -279,103 +275,72 @@
       opacity: 0;
       cursor: pointer;
     }
-  /* ========== LOADER CON LOGO FIJO + ARO GIRANDO ========== */
-.loading-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  display: flex;                 /* siempre flex, pero “apagado” por defecto */
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
 
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;          /* no bloquea clics cuando está oculto */
-  transition: opacity 0.25s ease, visibility 0.25s ease;
-}
+    /* ========== LOADER CON LOGO FIJO + ARO GIRANDO ========== */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
 
-/* Cuando está activo (se enciende el fade in) */
-.loading-overlay.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;          /* ahora sí bloquea clics mientras carga */
-}
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
 
+    .loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
 
+    .loader-wrapper {
+      position: relative;
+      width: 110px;
+      height: 110px;
+    }
 
-.loader-wrapper {
-  position: relative;
-  width: 110px;
-  height: 110px;
-}
+    .loader-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      border: 3px solid rgba(255, 255, 255, 0.18);
+      border-top-color: #e50914;
+      border-right-color: #e50914;
+      animation: spinRing 0.9s linear infinite;
+    }
 
-/* Aro que gira */
-.loader-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 999px;
-  border: 3px solid rgba(255, 255, 255, 0.18);
-  border-top-color: #e50914;          /* rojo LFP */
-  border-right-color: #e50914;
-  animation: spinRing 0.9s linear infinite;
-}
+    .loader-logo {
+      position: absolute;
+      width: 70%;
+      max-width: 70%;
+      height: auto;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      object-fit: contain;
+    }
 
-/* Logo centrado, quieto */
-.loader-logo {
-  position: absolute;
-  inset: 12px;                         /* margen dentro del aro */
-  width: auto;
-  height: auto;
-  object-fit: contain;
-}
-
-/* Animación del aro */
-@keyframes spinRing {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Más grande en tablet/PC */
-@media (min-width: 768px) {
-  .loader-wrapper {
-    width: 110px;
-    height: 110px;
-  }
-
-  .loader-logo {
-    inset: 16px;
-  }
-}
-  .loader-logo {
-    max-width: 70%;   /* más pequeño aún */
-    max-height: 70%;
-    top: 22px;
-    left: 22px;
-    right: 22px;
-    bottom: 22px;
-  }
-}
-
-  }
-}
-
+    @keyframes spinRing {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* ====== RESPONSIVO EN TABLET / PC ====== */
     @media (min-width: 768px) {
       body {
-        padding: 40px 24px;
+        padding: 32px 16px;
       }
 
       .card {
-        max-width: 640px;          /* más ancho en tablet / pc */
+        max-width: 820px;          /* más ancho aún en tablet */
         border-radius: 20px;
         padding: 28px 24px;
-      }
-
-      .header-logo img {
-        max-width: 420px;
       }
 
       h1 {
@@ -401,33 +366,27 @@
         font-size: 0.95rem;
       }
 
-      /* en pantallas grandes: dos columnas en los pares */
-          .half {
-        flex: 1;
-        min-width: 48%;
+      .loader-wrapper {
+        width: 130px;
+        height: 130px;
       }
-
     }
   </style>
 </head>
 
 <body>
- <!-- AUDIO PARA EL MENSAJE DE GRACIAS -->
-<audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
+  <!-- AUDIO PARA EL MENSAJE DE GRACIAS -->
+  <audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
 
-<!-- OVERLAY DE CARGA CON LOGO FIJO + ARO GIRANDO -->
-<div id="loading-overlay" class="loading-overlay">
-  <div class="loader-wrapper">
-    <div class="loader-ring"></div>
-    <img src="lfp-logo.jpg" class="loader-logo" alt="Cargando LFP...">
+  <!-- OVERLAY DE CARGA CON LOGO FIJO + ARO GIRANDO -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loader-wrapper">
+      <div class="loader-ring"></div>
+      <img src="lfp-logo.jpg" class="loader-logo" alt="Cargando LFP...">
+    </div>
   </div>
-</div>
-
-
-
 
   <div class="card">
-
     <div class="header-logo">
       <img src="lfp-logo.jpg" alt="LFP Soluciones Automotrices">
     </div>
@@ -437,13 +396,15 @@
 
     <!-- DATOS DEL CLIENTE -->
     <h2>Datos del Cliente</h2>
-    <div class="field">
-      <div class="label">Nombre del cliente</div>
-      <input type="text" id="cliente" placeholder=" Juan Pérez" />
-    </div>
-    <div class="field">
-      <div class="label">Teléfono</div>
-      <input type="tel" id="telefono" placeholder=" 7xxxxxxx" />
+    <div class="input-row">
+      <div class="field half">
+        <div class="label">Nombre del cliente</div>
+        <input type="text" id="cliente" placeholder=" Juan Pérez" />
+      </div>
+      <div class="field half">
+        <div class="label">Teléfono</div>
+        <input type="tel" id="telefono" placeholder=" 7xxxxxxx" />
+      </div>
     </div>
 
     <!-- DATOS DEL VEHÍCULO -->
@@ -518,7 +479,6 @@
             No has seleccionado fotos
           </div>
         </div>
-        <!-- input real, invisible pero funcional -->
         <input type="file" id="fotos" accept="image/*" multiple>
       </div>
       <p class="small">Máximo 3 fotos por registro.</p>
@@ -555,7 +515,6 @@
     const audioGracias = document.getElementById("audio-gracias");
     const loadingOverlay = document.getElementById("loading-overlay");
 
-
     function resizeCanvas() {
       const ratio = Math.max(window.devicePixelRatio || 1, 1);
       const container = document.getElementById("signature-container");
@@ -577,7 +536,7 @@
       preview.style.display = "none";
     });
 
-    // === LÓGICA DEL INPUT DE FOTOS PERSONALIZADO ===
+    // Lógica del input de fotos personalizado
     fotosInput.addEventListener("change", () => {
       const files = Array.from(fotosInput.files || []);
       if (files.length === 0) {
@@ -623,12 +582,10 @@
         alert("La firma es obligatoria");
         return;
       }
-      // Mostrar loader y desactivar botón de enviar
-// Mostrar loader con fade in
-if (loadingOverlay) loadingOverlay.classList.add("active");
-submitBtn.disabled = true;
 
-
+      // Mostrar loader con fade in
+      if (loadingOverlay) loadingOverlay.classList.add("active");
+      submitBtn.disabled = true;
 
       const elementos = Array.from(
         document.querySelectorAll('input[name="elementos"]:checked')
@@ -637,7 +594,6 @@ submitBtn.disabled = true;
       const fotosArchivos = Array.from(fotosInput.files || []);
 
       const formData = new FormData();
-
       formData.append("cliente", cliente);
       formData.append("telefono", telefono);
       formData.append("marca", marca);
@@ -661,39 +617,33 @@ submitBtn.disabled = true;
       const firmaBase64 = firmaDataURL.split(",")[1];
       formData.append("firma_b64", firmaBase64);
       formData.append("firma_name", `firma_${Date.now()}.png`);
-      // Ya no mostramos la firma abajo
+
       preview.style.display = "none";
       output.textContent = "";
 
+      try {
+        await fetch(WEBAPP_URL, {
+          method: "POST",
+          body: formData,
+          mode: "no-cors"
+        });
 
-     try {
-  await fetch(WEBAPP_URL, {
-    method: "POST",
-    body: formData,
-    mode: "no-cors"
-  });
+        output.textContent = "Formulario enviado correctamente ✔️";
 
-  // Mensaje de éxito
-  output.textContent = "Formulario enviado correctamente ✔️";
+        if (audioGracias) {
+          audioGracias.currentTime = 0;
+          audioGracias.play().catch(() => {});
+        }
 
-  // 🔊 Reproducir audio de agradecimiento
-  if (audioGracias) {
-    audioGracias.currentTime = 0;
-    audioGracias.play().catch(() => {});
-  }
-
-  alert("Formulario enviado correctamente ✔️");
-} catch (err) {
-  console.error("Error en fetch:", err);
-  output.textContent = "Error en fetch:\n" + err;
-  alert("Conexión fallida ❌ (fetch)");
-} finally {
-  // Fade out del loader
-  if (loadingOverlay) loadingOverlay.classList.remove("active");
-  submitBtn.disabled = false;
-}
-
-
+        alert("Formulario enviado correctamente ✔️");
+      } catch (err) {
+        console.error("Error en fetch:", err);
+        output.textContent = "Error en fetch:\n" + err;
+        alert("Conexión fallida ❌ (fetch)");
+      } finally {
+        if (loadingOverlay) loadingOverlay.classList.remove("active");
+        submitBtn.disabled = false;
+      }
 
       // Limpiar formulario
       document.getElementById("cliente").value = "";
@@ -715,6 +665,7 @@ submitBtn.disabled = true;
   </script>
 </body>
 </html>
+
 
 
 
