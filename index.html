@@ -481,7 +481,7 @@
             No has seleccionado fotos
           </div>
         </div>
-        <input type="file" id="fotos" accept="image/*" multiple>
+       <input type="file" id="fotos" accept="image/*" multiple>
       </div>
       <p class="small">Máximo 3 fotos por registro.</p>
     </div>
@@ -537,6 +537,15 @@
       signaturePad.clear();
       preview.style.display = "none";
     });
+    let fotosAcumuladas = [];
+
+fotosInput.addEventListener("change", () => {
+  const nuevas = Array.from(fotosInput.files);
+  fotosAcumuladas = [...fotosAcumuladas, ...nuevas].slice(0, 3); // máximo 3
+  fileLabelText.textContent = `${fotosAcumuladas.length} fotos seleccionadas`;
+});
+    
+
 
     // Lógica del input de fotos personalizado
     fotosInput.addEventListener("change", () => {
@@ -593,7 +602,7 @@
         document.querySelectorAll('input[name="elementos"]:checked')
       ).map(el => el.value);
 
-      const fotosArchivos = Array.from(fotosInput.files || []);
+const fotosArchivos = fotosAcumuladas;
 
       const formData = new FormData();
       formData.append("cliente", cliente);
@@ -667,6 +676,7 @@
   </script>
 </body>
 </html>
+
 
 
 
