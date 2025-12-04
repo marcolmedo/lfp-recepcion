@@ -276,7 +276,7 @@
       opacity: 0;
       cursor: pointer;
     }
-    /* ========== LOADER CON LOGO GIRANDO ========== */
+  /* ========== LOADER CON LOGO FIJO + ARO GIRANDO ========== */
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -287,20 +287,48 @@
   z-index: 9999;
 }
 
-.loader-logo {
-  width: 90px;                /* puedes subir a 110px si quieres */
+.loader-wrapper {
+  position: relative;
+  width: 90px;
   height: 90px;
-  object-fit: contain;
-  animation: spinLogo 1.2s linear infinite;
-  opacity: 0.95;
 }
 
-@keyframes spinLogo {
-  from {
-    transform: rotate(0deg);
-  }
+/* Aro que gira */
+.loader-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  border-top-color: #e50914;          /* rojo LFP */
+  border-right-color: #e50914;
+  animation: spinRing 0.9s linear infinite;
+}
+
+/* Logo centrado, quieto */
+.loader-logo {
+  position: absolute;
+  inset: 10px;                          /* deja margen para el aro */
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Animación del aro */
+@keyframes spinRing {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Más grande en tablet/PC */
+@media (min-width: 768px) {
+  .loader-wrapper {
+    width: 120px;
+    height: 120px;
+  }
+
+  .loader-logo {
+    inset: 14px;
   }
 }
 
@@ -353,13 +381,17 @@
 </head>
 
 <body>
-  <!-- AUDIO PARA EL MENSAJE DE GRACIAS -->
-  <audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
+ <!-- AUDIO PARA EL MENSAJE DE GRACIAS -->
+<audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
 
-  <!-- OVERLAY DE CARGA CON LOGO GIRANDO -->
+<!-- OVERLAY DE CARGA CON LOGO FIJO + ARO GIRANDO -->
 <div id="loading-overlay" class="loading-overlay">
-  <img src="lfp-water.png" class="loader-logo" alt="Cargando LFP...">
+  <div class="loader-wrapper">
+    <div class="loader-ring"></div>
+    <img src="lfp-water.png" class="loader-logo" alt="Cargando LFP...">
+  </div>
 </div>
+
 
 
 
@@ -649,6 +681,7 @@ submitBtn.disabled = true;
   </script>
 </body>
 </html>
+
 
 
 
