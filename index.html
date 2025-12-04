@@ -307,10 +307,12 @@
 /* Logo centrado, quieto */
 .loader-logo {
   position: absolute;
-  inset: 10px;                          /* deja margen para el aro */
-  width: auto;
-  height: auto;
+  inset: 12px;                 /* margen dentro del aro */
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
   object-fit: contain;
+}
+
 }
 
 /* Animación del aro */
@@ -323,12 +325,12 @@
 /* Más grande en tablet/PC */
 @media (min-width: 768px) {
   .loader-wrapper {
-    width: 120px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
   }
 
   .loader-logo {
-    inset: 14px;
+    inset: 16px;
   }
 }
 
@@ -681,6 +683,7 @@ submitBtn.disabled = true;
   </script>
 </body>
 </html>
+
 
 
 
