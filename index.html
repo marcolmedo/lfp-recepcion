@@ -281,10 +281,24 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
-  display: none;              /* se muestra solo al enviar */
+  display: flex;                 /* siempre flex, pero “apagado” por defecto */
   align-items: center;
   justify-content: center;
   z-index: 9999;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;          /* no bloquea clics cuando está oculto */
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+/* Cuando está activo (se enciende el fade in) */
+.loading-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;          /* ahora sí bloquea clics mientras carga */
+}
+
 }
 
 .loader-wrapper {
@@ -611,8 +625,10 @@
         return;
       }
       // Mostrar loader y desactivar botón de enviar
-if (loadingOverlay) loadingOverlay.style.display = "flex";
+// Mostrar loader con fade in
+if (loadingOverlay) loadingOverlay.classList.add("active");
 submitBtn.disabled = true;
+
 
 
       const elementos = Array.from(
@@ -673,10 +689,11 @@ submitBtn.disabled = true;
   output.textContent = "Error en fetch:\n" + err;
   alert("Conexión fallida ❌ (fetch)");
 } finally {
-  // Apagar loader y habilitar botón SIEMPRE (éxito o error)
-  if (loadingOverlay) loadingOverlay.style.display = "none";
+  // Fade out del loader
+  if (loadingOverlay) loadingOverlay.classList.remove("active");
   submitBtn.disabled = false;
 }
+
 
 
       // Limpiar formulario
@@ -699,6 +716,7 @@ submitBtn.disabled = true;
   </script>
 </body>
 </html>
+
 
 
 
