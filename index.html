@@ -117,8 +117,11 @@
     }
 
     /* Por defecto: una columna (celular) */
-    .half {
-      flex: 1 1 100%;
+   .half {
+  flex: 1;
+  min-width: 48%;   /* así caben 2 por fila y se acomodan solos */
+}
+
     }
 
     input,
@@ -299,7 +302,7 @@
   pointer-events: auto;          /* ahora sí bloquea clics mientras carga */
 }
 
-}
+
 
 .loader-wrapper {
   position: relative;
@@ -321,20 +324,10 @@
 /* Logo centrado, quieto */
 .loader-logo {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
-  width: 100%;
-  height: 100%;
+  inset: 12px;                         /* margen dentro del aro */
+  width: auto;
+  height: auto;
   object-fit: contain;
-  max-width: 80%;     /* 🔥 fuerza a que se vea más pequeño */
-  max-height: 80%;
-  margin: auto;       /* centra perfectamente */
-}
-
-}
-
 }
 
 /* Animación del aro */
@@ -347,10 +340,14 @@
 /* Más grande en tablet/PC */
 @media (min-width: 768px) {
   .loader-wrapper {
-    width: 150px;
-    height: 150px;
+    width: 110px;
+    height: 110px;
   }
 
+  .loader-logo {
+    inset: 16px;
+  }
+}
   .loader-logo {
     max-width: 70%;   /* más pequeño aún */
     max-height: 70%;
@@ -405,9 +402,11 @@
       }
 
       /* en pantallas grandes: dos columnas en los pares */
-      .half {
-        flex: 1 1 calc(50% - 4px);
+          .half {
+        flex: 1;
+        min-width: 48%;
       }
+
     }
   </style>
 </head>
@@ -716,6 +715,7 @@ submitBtn.disabled = true;
   </script>
 </body>
 </html>
+
 
 
 
