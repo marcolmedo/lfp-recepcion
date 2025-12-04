@@ -307,9 +307,12 @@
 /* Logo centrado, quieto */
 .loader-logo {
   position: absolute;
-  inset: 12px;                 /* margen dentro del aro */
-  width: calc(100% - 24px);
-  height: calc(100% - 24px);
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  width: auto;
+  height: auto;
   object-fit: contain;
 }
 
@@ -325,12 +328,15 @@
 /* Más grande en tablet/PC */
 @media (min-width: 768px) {
   .loader-wrapper {
-    width: 130px;
-    height: 130px;
+    width: 140px;
+    height: 140px;
   }
 
-  .loader-logo {
-    inset: 16px;
+ .loader-logo {
+    top: 18px;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
   }
 }
 
@@ -390,7 +396,7 @@
 <div id="loading-overlay" class="loading-overlay">
   <div class="loader-wrapper">
     <div class="loader-ring"></div>
-    <img src="lfp-water.png" class="loader-logo" alt="Cargando LFP...">
+    <img src="lfp-logo.jpg" class="loader-logo" alt="Cargando LFP...">
   </div>
 </div>
 
@@ -683,6 +689,7 @@ submitBtn.disabled = true;
   </script>
 </body>
 </html>
+
 
 
 
