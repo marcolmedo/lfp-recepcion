@@ -481,7 +481,7 @@
             No has seleccionado fotos
           </div>
         </div>
-       <input type="file" id="fotos" accept="image/*" multiple>
+  <input type="file" id="fotos" accept="image/*" capture="environment" multiple>
       </div>
       <p class="small">Máximo 3 fotos por registro.</p>
     </div>
@@ -540,24 +540,24 @@
     let fotosAcumuladas = [];
 
 fotosInput.addEventListener("change", () => {
-  const nuevas = Array.from(fotosInput.files);
-  fotosAcumuladas = [...fotosAcumuladas, ...nuevas].slice(0, 3); // máximo 3
-  fileLabelText.textContent = `${fotosAcumuladas.length} fotos seleccionadas`;
+  const nuevas = Array.from(fotosInput.files || []);
+
+  // Acumulamos y limitamos a 3 fotos
+  fotosAcumuladas = [...fotosAcumuladas, ...nuevas].slice(0, 3);
+
+  // Texto del label
+  if (fotosAcumuladas.length === 0) {
+    fileLabelText.textContent = "No has seleccionado fotos";
+  } else if (fotosAcumuladas.length === 1) {
+    fileLabelText.textContent = fotosAcumuladas[0].name;
+  } else {
+    fileLabelText.textContent = `${fotosAcumuladas.length} fotos seleccionadas`;
+  }
+
+  // Muy importante: limpiar el input para poder volver a abrir cámara/galería
+  fotosInput.value = "";
 });
-    
 
-
-    // Lógica del input de fotos personalizado
-    fotosInput.addEventListener("change", () => {
-      const files = Array.from(fotosInput.files || []);
-      if (files.length === 0) {
-        fileLabelText.textContent = "No has seleccionado fotos";
-      } else if (files.length === 1) {
-        fileLabelText.textContent = files[0].name;
-      } else {
-        fileLabelText.textContent = `${files.length} fotos seleccionadas`;
-      }
-    });
 
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
@@ -672,10 +672,15 @@ const fotosArchivos = fotosAcumuladas;
       document
         .querySelectorAll('input[name="elementos"]:checked')
         .forEach(el => (el.checked = false));
+      // Limpiar fotos acumuladas y texto del label
+fotosAcumuladas = [];
+fileLabelText.textContent = "No has seleccionado fotos";
+
     });
   </script>
 </body>
 </html>
+
 
 
 
