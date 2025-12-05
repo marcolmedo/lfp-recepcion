@@ -318,8 +318,8 @@
 
     .loader-logo {
       position: absolute;
-      width: 70%;
-      max-width: 70%;
+      width: 85%;
+      max-width: 85%;
       height: auto;
       left: 50%;
       top: 50%;
@@ -334,15 +334,26 @@
     }
 
     /* ====== RESPONSIVO EN TABLET / PC ====== */
-    @media (min-width: 768px) {
-      body {
-        padding: 32px 16px;
-      }
+    /* ====== RESPONSIVO EN TABLET / PC ====== */
+@media (min-width: 768px) {
 
-      .card {
-        max-width: 700px;          /* más ancho aún en tablet */
-        border-radius: 20px;
-        padding: 28px 24px;
+  .loader-logo {
+    width: 85%;
+    max-width: 85%;
+  }
+
+  body {
+    padding: 32px 16px;
+  }
+
+  .card {
+    max-width: 700px;   /* más ancho en tablet */
+    border-radius: 20px;
+    padding: 28px 24px;
+  }
+
+}
+
       }
 
       h1 {
@@ -681,6 +692,7 @@ fileLabelText.textContent = "No has seleccionado fotos";
   </script>
 </body>
 </html>
+
 
 
 
