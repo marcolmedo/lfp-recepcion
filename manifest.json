@@ -1,9 +1,9 @@
 {
-  "name": "LFP Soluciones Automotrices",
-  "short_name": "LFP Recepción",
-  "start_url": "index.html",
+  "name": "Recepción de Vehículo - LFP SRL",
+  "short_name": "LFP SRL",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#050505",
   "theme_color": "#050505",
   "icons": [
@@ -19,3 +19,4 @@
     }
   ]
 }
+
