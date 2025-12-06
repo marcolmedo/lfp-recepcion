@@ -1,10 +1,21 @@
-const CACHE_NAME = "lfp-recepcion-v1";
+const CACHE_NAME = "lfp-recepcion-v2"; // subí la versión
 const URLS_TO_CACHE = [
   "./",
   "./index.html",
   "./manifest.json",
+
+  // Imágenes principales
   "./lfp-logo.jpg",
   "./lfp-water.png",
+
+  // Íconos PWA / favicon
+  "./apple-touch-icon.png",
+  "./favicon.ico",
+  "./favicon-96x96.png",
+  "./web-app-manifest-192x192.png",
+  "./web-app-manifest-512x512.png",
+
+  // Audio de gracias
   "./audio.mp3"
 ];
 
@@ -15,7 +26,7 @@ self.addEventListener("install", (event) => {
   );
 });
 
-// Activar y limpiar caches viejos (por si actualizas versión)
+// Activar y limpiar caches viejos
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((names) =>
@@ -30,7 +41,7 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Responder primero desde caché, luego red
+// Responder primero desde caché, luego desde la red
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
@@ -38,3 +49,4 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+
