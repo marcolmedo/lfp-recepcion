@@ -5,12 +5,20 @@
   <title>Recepción de Vehículo - LFP SRL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- PWA / APP -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050505">
+  <!-- iOS (Safari) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
   <!-- Signature Pad desde CDN -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    *,
+    * ,
     *::before,
     *::after {
       box-sizing: border-box;
@@ -66,16 +74,14 @@
     }
 
     .card {
-  width: 100%;
-  max-width: 650px;   /* antes 780px */
-  margin: 8px auto 24px;
-  background: #181818;
-  border-radius: 18px;
-  padding: 20px 16px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
-  border: 1px solid #262626;
-}
-;
+      width: 100%;
+      max-width: 650px;
+      margin: 8px auto 24px;
+      background: #181818;
+      border-radius: 18px;
+      padding: 20px 16px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
+      border: 1px solid #262626;
     }
 
     /* LOGO RESPONSIVO */
@@ -334,26 +340,15 @@
     }
 
     /* ====== RESPONSIVO EN TABLET / PC ====== */
-    /* ====== RESPONSIVO EN TABLET / PC ====== */
-@media (min-width: 768px) {
+    @media (min-width: 768px) {
+      body {
+        padding: 32px 16px;
+      }
 
-  .loader-logo {
-    width: 85%;
-    max-width: 85%;
-  }
-
-  body {
-    padding: 32px 16px;
-  }
-
-  .card {
-    max-width: 700px;   /* más ancho en tablet */
-    border-radius: 20px;
-    padding: 28px 24px;
-  }
-
-}
-
+      .card {
+        max-width: 700px;          /* más ancho aún en tablet */
+        border-radius: 20px;
+        padding: 28px 24px;
       }
 
       h1 {
@@ -395,8 +390,8 @@
   <div id="loading-overlay" class="loading-overlay">
     <div class="loader-wrapper">
       <div class="loader-ring"></div>
+      <!-- usa el mismo PNG transparente del fondo -->
       <img src="lfp-water.png" class="loader-logo" alt="Cargando LFP...">
-
     </div>
   </div>
 
@@ -493,7 +488,8 @@
             No has seleccionado fotos
           </div>
         </div>
-  <input type="file" id="fotos" accept="image/*" capture="environment" multiple>
+        <!-- importante: camera por defecto, se pueden acumular 3 -->
+        <input type="file" id="fotos" accept="image/*" capture="environment" multiple>
       </div>
       <p class="small">Máximo 3 fotos por registro.</p>
     </div>
@@ -549,27 +545,28 @@
       signaturePad.clear();
       preview.style.display = "none";
     });
+
+    // Acumulador de fotos para permitir abrir cámara varias veces
     let fotosAcumuladas = [];
 
-fotosInput.addEventListener("change", () => {
-  const nuevas = Array.from(fotosInput.files || []);
+    fotosInput.addEventListener("change", () => {
+      const nuevas = Array.from(fotosInput.files || []);
 
-  // Acumulamos y limitamos a 3 fotos
-  fotosAcumuladas = [...fotosAcumuladas, ...nuevas].slice(0, 3);
+      // Acumulamos y limitamos a 3 fotos
+      fotosAcumuladas = [...fotosAcumuladas, ...nuevas].slice(0, 3);
 
-  // Texto del label
-  if (fotosAcumuladas.length === 0) {
-    fileLabelText.textContent = "No has seleccionado fotos";
-  } else if (fotosAcumuladas.length === 1) {
-    fileLabelText.textContent = fotosAcumuladas[0].name;
-  } else {
-    fileLabelText.textContent = `${fotosAcumuladas.length} fotos seleccionadas`;
-  }
+      // Texto del label
+      if (fotosAcumuladas.length === 0) {
+        fileLabelText.textContent = "No has seleccionado fotos";
+      } else if (fotosAcumuladas.length === 1) {
+        fileLabelText.textContent = fotosAcumuladas[0].name;
+      } else {
+        fileLabelText.textContent = `${fotosAcumuladas.length} fotos seleccionadas`;
+      }
 
-  // Muy importante: limpiar el input para poder volver a abrir cámara/galería
-  fotosInput.value = "";
-});
-
+      // Importante: limpiar input para poder volver a abrir cámara/galería
+      fotosInput.value = "";
+    });
 
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
@@ -614,7 +611,7 @@ fotosInput.addEventListener("change", () => {
         document.querySelectorAll('input[name="elementos"]:checked')
       ).map(el => el.value);
 
-const fotosArchivos = fotosAcumuladas;
+      const fotosArchivos = fotosAcumuladas;
 
       const formData = new FormData();
       formData.append("cliente", cliente);
@@ -684,14 +681,25 @@ const fotosArchivos = fotosAcumuladas;
       document
         .querySelectorAll('input[name="elementos"]:checked')
         .forEach(el => (el.checked = false));
-      // Limpiar fotos acumuladas y texto del label
-fotosAcumuladas = [];
-fileLabelText.textContent = "No has seleccionado fotos";
 
+      // Limpiar fotos acumuladas y texto del label
+      fotosAcumuladas = [];
+      fileLabelText.textContent = "No has seleccionado fotos";
     });
+
+    // Registro del Service Worker para PWA
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./service-worker.js")
+          .catch((err) => console.log("SW error:", err));
+      });
+    }
   </script>
 </body>
 </html>
+
+
 
 
 
