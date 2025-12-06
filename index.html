@@ -5,27 +5,26 @@
   <title>Recepción de Vehículo - LFP SRL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<!-- PWA / APP -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#050505">
+  <!-- PWA / APP -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050505">
 
-<!-- iOS (Safari) -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- iOS (Safari) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-<!-- Favicon e íconos Android -->
-<link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="192x192" href="web-app-manifest-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="web-app-manifest-512x512.png">
-
+  <!-- Favicon e íconos Android -->
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="web-app-manifest-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="web-app-manifest-512x512.png">
 
   <!-- Signature Pad desde CDN -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    * ,
+    *,
     *::before,
     *::after {
       box-sizing: border-box;
@@ -346,6 +345,27 @@
       }
     }
 
+    /* ====== TOAST (mensaje flotante) ====== */
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f0f0f;
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 12px;
+      border: 1px solid #e50914;
+      font-size: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 99999;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+
     /* ====== RESPONSIVO EN TABLET / PC ====== */
     @media (min-width: 768px) {
       body {
@@ -392,6 +412,9 @@
 <body>
   <!-- AUDIO PARA EL MENSAJE DE GRACIAS -->
   <audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
+
+  <!-- TOAST (mensaje sin alert) -->
+  <div id="toast" class="toast">Formulario enviado correctamente ✔️</div>
 
   <!-- OVERLAY DE CARGA CON LOGO FIJO + ARO GIRANDO -->
   <div id="loading-overlay" class="loading-overlay">
@@ -532,6 +555,14 @@
     const audioGracias = document.getElementById("audio-gracias");
     const loadingOverlay = document.getElementById("loading-overlay");
 
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      if (!toast) return;
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+
     function resizeCanvas() {
       const ratio = Math.max(window.devicePixelRatio || 1, 1);
       const container = document.getElementById("signature-container");
@@ -575,49 +606,48 @@
       fotosInput.value = "";
     });
 
-   // Convierte el archivo a Base64 pero antes lo comprime
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
+    // Convierte el archivo a Base64 pero antes lo comprime
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
 
-    reader.onload = () => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            const canvasTmp = document.createElement("canvas");
+            const ctx = canvasTmp.getContext("2d");
 
-        const maxWidth = 1600; // tamaño máximo de ancho
-        const maxHeight = 1600; // por si acaso también limitamos alto
+            const maxWidth = 1600; // tamaño máximo de ancho
+            const maxHeight = 1600; // por si acaso también limitamos alto
 
-        let width = img.width;
-        let height = img.height;
+            let width = img.width;
+            let height = img.height;
 
-        // Escalar manteniendo proporción si es muy grande
-        if (width > maxWidth || height > maxHeight) {
-          const ratio = Math.min(maxWidth / width, maxHeight / height);
-          width = width * ratio;
-          height = height * ratio;
-        }
+            // Escalar manteniendo proporción si es muy grande
+            if (width > maxWidth || height > maxHeight) {
+              const ratio = Math.min(maxWidth / width, maxHeight / height);
+              width = width * ratio;
+              height = height * ratio;
+            }
 
-        canvas.width = width;
-        canvas.height = height;
-        ctx.drawImage(img, 0, 0, width, height);
+            canvasTmp.width = width;
+            canvasTmp.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
 
-        // 0.8 = buena calidad + tamaño mucho menor
-        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.8);
-        const base64 = compressedDataUrl.split(",")[1];
-        resolve(base64);
-      };
+            // 0.8 = buena calidad + tamaño mucho menor
+            const compressedDataUrl = canvasTmp.toDataURL("image/jpeg", 0.8);
+            const base64 = compressedDataUrl.split(",")[1];
+            resolve(base64);
+          };
 
-      img.onerror = (err) => reject(err);
-      img.src = reader.result;
-    };
+          img.onerror = (err) => reject(err);
+          img.src = reader.result;
+        };
 
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
 
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxFJLc70KOrQHGV5hzqSz2lXxchsHUwXIQ0ewLhJfcxmtSu4A7NGMTzp0HoTnIDAHPDBg/exec";
 
@@ -693,7 +723,9 @@ function fileToBase64(file) {
           audioGracias.play().catch(() => {});
         }
 
-        alert("Formulario enviado correctamente ✔️");
+        // ✅ Mostrar toast en lugar de alert
+        showToast("Formulario enviado correctamente ✔️");
+
       } catch (err) {
         console.error("Error en fetch:", err);
         output.textContent = "Error en fetch:\n" + err;
@@ -736,6 +768,7 @@ function fileToBase64(file) {
   </script>
 </body>
 </html>
+
 
 
 
