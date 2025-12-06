@@ -1,21 +1,27 @@
 {
   "name": "Recepción de Vehículo - LFP SRL",
   "short_name": "LFP SRL",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/lfp-recepcion/",
+  "scope": "/lfp-recepcion/",
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#050505",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon-512.png",
+      "src": "web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
