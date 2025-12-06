@@ -575,18 +575,49 @@
       fotosInput.value = "";
     });
 
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const result = reader.result || "";
-          const base64 = result.toString().split(",")[1];
-          resolve(base64);
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
+   // Convierte el archivo a Base64 pero antes lo comprime
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        const maxWidth = 1600; // tamaño máximo de ancho
+        const maxHeight = 1600; // por si acaso también limitamos alto
+
+        let width = img.width;
+        let height = img.height;
+
+        // Escalar manteniendo proporción si es muy grande
+        if (width > maxWidth || height > maxHeight) {
+          const ratio = Math.min(maxWidth / width, maxHeight / height);
+          width = width * ratio;
+          height = height * ratio;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // 0.8 = buena calidad + tamaño mucho menor
+        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.8);
+        const base64 = compressedDataUrl.split(",")[1];
+        resolve(base64);
+      };
+
+      img.onerror = (err) => reject(err);
+      img.src = reader.result;
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxFJLc70KOrQHGV5hzqSz2lXxchsHUwXIQ0ewLhJfcxmtSu4A7NGMTzp0HoTnIDAHPDBg/exec";
 
@@ -705,6 +736,7 @@
   </script>
 </body>
 </html>
+
 
 
 
