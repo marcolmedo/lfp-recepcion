@@ -617,8 +617,8 @@
             const canvasTmp = document.createElement("canvas");
             const ctx = canvasTmp.getContext("2d");
 
-            const maxWidth = 1600; // tamaño máximo de ancho
-            const maxHeight = 1600; // por si acaso también limitamos alto
+            const maxWidth = 1200; // tamaño máximo de ancho
+            const maxHeight = 1200; // por si acaso también limitamos alto
 
             let width = img.width;
             let height = img.height;
@@ -635,7 +635,7 @@
             ctx.drawImage(img, 0, 0, width, height);
 
             // 0.8 = buena calidad + tamaño mucho menor
-            const compressedDataUrl = canvasTmp.toDataURL("image/jpeg", 0.8);
+            const compressedDataUrl = canvasTmp.toDataURL("image/jpeg", 0.7);
             const base64 = compressedDataUrl.split(",")[1];
             resolve(base64);
           };
@@ -768,6 +768,7 @@
   </script>
 </body>
 </html>
+
 
 
 
