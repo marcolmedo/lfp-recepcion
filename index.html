@@ -521,7 +521,7 @@
         <!-- importante: camera por defecto, se pueden acumular 3 -->
         <input type="file" id="fotos" accept="image/*" capture="environment" multiple>
       </div>
-      <p class="small">Máximo 3 fotos por registro.</p>
+      <p class="small">Máximo 5 fotos por registro.</p>
     </div>
 
     <!-- FIRMA -->
@@ -590,8 +590,8 @@
     fotosInput.addEventListener("change", () => {
       const nuevas = Array.from(fotosInput.files || []);
 
-      // Acumulamos y limitamos a 3 fotos
-      fotosAcumuladas = [...fotosAcumuladas, ...nuevas].slice(0, 3);
+      // Acumulamos y limitamos a 5 fotos
+      fotosAcumuladas = [...fotosAcumuladas, ...nuevas].slice(0, 5);
 
       // Texto del label
       if (fotosAcumuladas.length === 0) {
@@ -692,7 +692,7 @@
       formData.append("observaciones", observaciones);
       formData.append("elementosVerificados", elementos.join(", "));
 
-      const maxFotos = Math.min(fotosArchivos.length, 3);
+      const maxFotos = Math.min(fotosArchivos.length, 5);
       for (let i = 0; i < maxFotos; i++) {
         const file = fotosArchivos[i];
         const base64 = await fileToBase64(file);
@@ -768,6 +768,7 @@
   </script>
 </body>
 </html>
+
 
 
 
