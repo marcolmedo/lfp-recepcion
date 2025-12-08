@@ -134,8 +134,10 @@
       min-width: 48%;
     }
 
+    /* Inputs, textarea y select comparten estilo */
     input,
-    textarea {
+    textarea,
+    select {
       width: 100%;
       padding: 10px 12px;
       border-radius: 10px;
@@ -145,11 +147,6 @@
       font-size: 0.9rem;
       transition: 0.15s ease;
     }
-    select:focus {
-  outline: none;
-  border-color: #e50914;
-  box-shadow: 0 0 0 1px #e50914;
-}
 
     textarea {
       min-height: 70px;
@@ -157,7 +154,8 @@
     }
 
     input:focus,
-    textarea:focus {
+    textarea:focus,
+    select:focus {
       outline: none;
       border-color: #e50914;
       box-shadow: 0 0 0 1px #e50914;
@@ -397,7 +395,8 @@
       }
 
       input,
-      textarea {
+      textarea,
+      select {
         font-size: 1rem;
         padding: 14px 16px;
       }
@@ -441,31 +440,25 @@
     <!-- DATOS DEL CLIENTE -->
     <h2>Datos del Cliente</h2>
     <div class="input-row">
-  <div class="field half">
-    <div class="label">Nombre del cliente/Empresa</div>
-    <input type="text" id="cliente" placeholder=" Juan Pérez" />
-  </div>
+      <div class="field half">
+        <div class="label">Nombre del cliente/Empresa</div>
+        <input type="text" id="cliente" placeholder=" Juan Pérez" />
+      </div>
 
-  <div class="field half">
-    <div class="label">Compañía de seguro o particular</div>
-    <select id="seguro">
-      <option value="">Seleccionar...</option>
-      <option value="Particular">Particular</option>
-      <option value="Alianza Seguros">Alianza Seguros</option>
-      <option value="Nacional Seguros">Nacional Seguros</option>
-      <option value="Credinform">Credinform</option>
-      <option value="Fortaleza Seguros">Fortaleza Seguros</option>
-      <option value="Bisa Seguros">Bisa Seguros</option>
-      <option value="Otra">Otra</option>
-    </select>
+      <div class="field half">
+        <div class="label">Compañía de seguro o particular</div>
+        <select id="seguro">
+          <option value="">Seleccionar...</option>
+          <option value="Particular">Particular</option>
+          <option value="Alianza Seguros">Alianza Seguros</option>
+          <option value="Nacional Seguros">Nacional Seguros</option>
+          <option value="Credinform">Credinform</option>
+          <option value="Fortaleza Seguros">Fortaleza Seguros</option>
+          <option value="Bisa Seguros">Bisa Seguros</option>
+          <option value="Otra">Otra</option>
+        </select>
 
-    <div class="label">Teléfono</div>
-    <input type="tel" id="telefono" placeholder=" 7xxxxxxx" />
-  </div>
-</div>
-
-
-        <div class="label">Teléfono</div>
+        <div class="label" style="margin-top:8px;">Teléfono</div>
         <input type="tel" id="telefono" placeholder=" 7xxxxxxx" />
       </div>
     </div>
@@ -542,7 +535,7 @@
             No has seleccionado fotos
           </div>
         </div>
-        <!-- importante: camera por defecto, se pueden acumular 3 -->
+        <!-- importante: cámara por defecto, se pueden acumular hasta 5 -->
         <input type="file" id="fotos" accept="image/*" capture="environment" multiple>
       </div>
       <p class="small">Máximo 5 fotos por registro.</p>
@@ -642,7 +635,7 @@
             const ctx = canvasTmp.getContext("2d");
 
             const maxWidth = 1200; // tamaño máximo de ancho
-            const maxHeight = 1200; // por si acaso también limitamos alto
+            const maxHeight = 1200; // tamaño máximo de alto
 
             let width = img.width;
             let height = img.height;
@@ -658,7 +651,7 @@
             canvasTmp.height = height;
             ctx.drawImage(img, 0, 0, width, height);
 
-            // 0.8 = buena calidad + tamaño mucho menor
+            // 0.7 = buena calidad + tamaño menor
             const compressedDataUrl = canvasTmp.toDataURL("image/jpeg", 0.7);
             const base64 = compressedDataUrl.split(",")[1];
             resolve(base64);
@@ -677,7 +670,7 @@
 
     submitBtn.addEventListener("click", async () => {
       const cliente = document.getElementById("cliente").value.trim();
-      const seguro = document.getElementById("seguro").value.trim();  // 👈 NUEVO
+      const seguro = document.getElementById("seguro").value.trim();
       const telefono = document.getElementById("telefono").value.trim();
       const marca = document.getElementById("marca").value.trim();
       const modeloAnio = document.getElementById("modeloAnio").value.trim();
@@ -708,7 +701,7 @@
 
       const formData = new FormData();
       formData.append("cliente", cliente);
-      formData.append("seguro", seguro);      // 👈 NUEVO
+      formData.append("seguro", seguro);
       formData.append("telefono", telefono);
       formData.append("marca", marca);
       formData.append("modelo", modeloAnio);
@@ -763,6 +756,7 @@
 
       // Limpiar formulario
       document.getElementById("cliente").value = "";
+      document.getElementById("seguro").value = "";
       document.getElementById("telefono").value = "";
       document.getElementById("marca").value = "";
       document.getElementById("modeloAnio").value = "";
@@ -794,6 +788,7 @@
   </script>
 </body>
 </html>
+
 
 
 
