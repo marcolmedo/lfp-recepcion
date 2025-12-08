@@ -587,10 +587,16 @@
     const fileLabelText = document.getElementById("file-label-text");
     const audioGracias = document.getElementById("audio-gracias");
     const loadingOverlay = document.getElementById("loading-overlay");
+    const placaInput = document.getElementById("placa");
 
-    // Convertir PLACA a mayúsculas automáticamente
-document.getElementById("placa").addEventListener("input", function() {
+placaInput.setAttribute("autocapitalize", "characters");  // fuerza teclado en mayúscula
+placaInput.setAttribute("autocomplete", "off"); 
+placaInput.setAttribute("autocorrect", "off");
+
+placaInput.addEventListener("input", function (e) {
+  const pos = this.selectionStart; 
   this.value = this.value.toUpperCase();
+  this.setSelectionRange(pos, pos);  // mantiene la posición del cursor
 });
 
 
@@ -811,6 +817,7 @@ document.getElementById("placa").addEventListener("input", function() {
   </script>
 </body>
 </html>
+
 
 
 
