@@ -145,6 +145,11 @@
       font-size: 0.9rem;
       transition: 0.15s ease;
     }
+    select:focus {
+  outline: none;
+  border-color: #e50914;
+  box-shadow: 0 0 0 1px #e50914;
+}
 
     textarea {
       min-height: 70px;
@@ -436,12 +441,11 @@
     <!-- DATOS DEL CLIENTE -->
     <h2>Datos del Cliente</h2>
     <div class="input-row">
-      <div class="field half">
-        <div class="label">Nombre del cliente/Empresa</div>
-        <input type="text" id="cliente" placeholder=" Juan Pérez" />
-      </div>
-      <div class="field half">
-        <div class="input-row">
+  <div class="field half">
+    <div class="label">Nombre del cliente/Empresa</div>
+    <input type="text" id="cliente" placeholder=" Juan Pérez" />
+  </div>
+
   <div class="field half">
     <div class="label">Compañía de seguro o particular</div>
     <select id="seguro">
@@ -454,8 +458,12 @@
       <option value="Bisa Seguros">Bisa Seguros</option>
       <option value="Otra">Otra</option>
     </select>
+
+    <div class="label">Teléfono</div>
+    <input type="tel" id="telefono" placeholder=" 7xxxxxxx" />
   </div>
 </div>
+
 
         <div class="label">Teléfono</div>
         <input type="tel" id="telefono" placeholder=" 7xxxxxxx" />
@@ -786,6 +794,7 @@
   </script>
 </body>
 </html>
+
 
 
 
