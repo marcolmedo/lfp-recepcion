@@ -437,10 +437,26 @@
     <h2>Datos del Cliente</h2>
     <div class="input-row">
       <div class="field half">
-        <div class="label">Nombre del cliente</div>
+        <div class="label">Nombre del cliente/Empresa</div>
         <input type="text" id="cliente" placeholder=" Juan Pérez" />
       </div>
       <div class="field half">
+        <div class="input-row">
+  <div class="field half">
+    <div class="label">Compañía de seguro o particular</div>
+    <select id="seguro">
+      <option value="">Seleccionar...</option>
+      <option value="Particular">Particular</option>
+      <option value="Alianza Seguros">Alianza Seguros</option>
+      <option value="Nacional Seguros">Nacional Seguros</option>
+      <option value="Credinform">Credinform</option>
+      <option value="Fortaleza Seguros">Fortaleza Seguros</option>
+      <option value="Bisa Seguros">Bisa Seguros</option>
+      <option value="Otra">Otra</option>
+    </select>
+  </div>
+</div>
+
         <div class="label">Teléfono</div>
         <input type="tel" id="telefono" placeholder=" 7xxxxxxx" />
       </div>
@@ -653,6 +669,7 @@
 
     submitBtn.addEventListener("click", async () => {
       const cliente = document.getElementById("cliente").value.trim();
+      const seguro = document.getElementById("seguro").value.trim();  // 👈 NUEVO
       const telefono = document.getElementById("telefono").value.trim();
       const marca = document.getElementById("marca").value.trim();
       const modeloAnio = document.getElementById("modeloAnio").value.trim();
@@ -683,6 +700,7 @@
 
       const formData = new FormData();
       formData.append("cliente", cliente);
+      formData.append("seguro", seguro);      // 👈 NUEVO
       formData.append("telefono", telefono);
       formData.append("marca", marca);
       formData.append("modelo", modeloAnio);
@@ -768,6 +786,7 @@
   </script>
 </body>
 </html>
+
 
 
 
