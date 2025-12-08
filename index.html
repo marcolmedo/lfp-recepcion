@@ -585,6 +585,12 @@
     const audioGracias = document.getElementById("audio-gracias");
     const loadingOverlay = document.getElementById("loading-overlay");
 
+    // Convertir PLACA a mayúsculas automáticamente
+document.getElementById("placa").addEventListener("input", function() {
+  this.value = this.value.toUpperCase();
+});
+
+
     function showToast(message) {
       const toast = document.getElementById("toast");
       if (!toast) return;
@@ -802,6 +808,7 @@
   </script>
 </body>
 </html>
+
 
 
 
