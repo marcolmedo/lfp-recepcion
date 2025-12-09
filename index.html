@@ -376,7 +376,7 @@
       font-size: 1rem;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.4s.ease;
+      transition: opacity 0.4s ease;
       z-index: 99999;
     }
     .toast.show {
@@ -473,29 +473,48 @@
 
       <h1>RECEPCIÓN DE VEHÍCULO</h1>
 
-    <!-- COMPAÑÍA DE SEGURO (fila completa) -->
-    <h2>Compañía de seguro</h2>
-<div class="field">
-  <select id="seguro">
-    <option value="">Seleccionar...</option>
-    <option value="Particular">Particular</option>
-    <option value="Alianza Seguros">Alianza Seguros</option>
-    <option value="Bisa Seguros">Bisa Seguros</option>
-    <option value="Credinform">Credinform</option>
-    <option value="Fortaleza Seguros">Fortaleza Seguros</option>
-    <option value="Nacional Seguros">Nacional Seguros</option>
-    <option value="Otra">Otra</option>
-  </select>
-</div>
+      <!-- DATOS GENERALES -->
+    <h2>Datos generales</h2>
 
-
-    <!-- DATOS DEL CLIENTE -->
-    <h2>Datos del Cliente</h2>
     <div class="input-row">
       <div class="field half">
-        <div class="label">Nombre del cliente/Empresa</div>
+        <div class="label">Compañía de seguro</div>
+        <select id="seguro">
+          <option value="">Seleccionar...</option>
+          <option value="Particular">Particular</option>
+          <option value="Alianza Seguros">Alianza Seguros</option>
+          <option value="Bisa Seguros">Bisa Seguros</option>
+          <option value="Credinform">Credinform</option>
+          <option value="Fortaleza Seguros">Fortaleza Seguros</option>
+          <option value="La Boliviana Ciacruz">La Boliviana Ciacruz</option>
+          <option value="Mercantil Santa Cruz">Mercantil Santa Cruz</option>
+          <option value="Nacional Seguros">Nacional Seguros</option>
+          <option value="Unibienes">Unibienes</option>
+          <option value="Otra">Otra</option>
+        </select>
+      </div>
+
+      <div class="field half">
+        <div class="label">Empresa (opcional)</div>
+        <input
+          type="text"
+          id="empresa"
+          placeholder="Empresa a la que se le hace el servicio (opcional)"
+        />
+      </div>
+    </div>
+
+    <div class="input-row">
+      <div class="field half">
+        <div class="label">Nombre del cliente</div>
         <input type="text" id="cliente" placeholder=" Juan Pérez" />
       </div>
+      <div class="field half">
+        <div class="label">Teléfono</div>
+        <input type="tel" id="telefono" placeholder=" 7xxxxxxx" />
+      </div>
+    </div>
+
       <div class="field half">
         <div class="label">Teléfono</div>
         <input type="tel" id="telefono" placeholder=" 7xxxxxxx" />
@@ -719,16 +738,17 @@ placaInput.addEventListener("input", function (e) {
 
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby0D8gdhSq_AhuBdB7zOh3_v9ZcAWghkJnLHKolyubq0jBSBKRy0Y3F-anfs76r5oVa/exec";
 
-    submitBtn.addEventListener("click", async () => {
-      const cliente = document.getElementById("cliente").value.trim();
-      const seguro = document.getElementById("seguro").value.trim();
-      const telefono = document.getElementById("telefono").value.trim();
-      const marca = document.getElementById("marca").value.trim();
-      const modeloAnio = document.getElementById("modeloAnio").value.trim();
-      const placa = document.getElementById("placa").value.trim();
-      const color = document.getElementById("color").value.trim();
-      const trabajo = document.getElementById("trabajo").value.trim();
-      const observaciones = document.getElementById("observaciones").value.trim();
+   submitBtn.addEventListener("click", async () => {
+  const cliente = document.getElementById("cliente").value.trim();
+  const seguro  = document.getElementById("seguro").value.trim();
+  const empresa = document.getElementById("empresa").value.trim(); // 👈 NUEVO
+  const telefono = document.getElementById("telefono").value.trim();
+  const marca = document.getElementById("marca").value.trim();
+  const modeloAnio = document.getElementById("modeloAnio").value.trim();
+  const placa = document.getElementById("placa").value.trim();
+  const color = document.getElementById("color").value.trim();
+  const trabajo = document.getElementById("trabajo").value.trim();
+  const observaciones = document.getElementById("observaciones").value.trim();
 
       if (!cliente || !telefono || !marca || !modeloAnio || !placa) {
         alert("Completa todos los datos obligatorios");
@@ -750,9 +770,10 @@ placaInput.addEventListener("input", function (e) {
 
       const fotosArchivos = fotosAcumuladas;
 
-      const formData = new FormData();
+           const formData = new FormData();
       formData.append("cliente", cliente);
       formData.append("seguro", seguro);
+      formData.append("empresa", empresa);  // 👈 NUEVO
       formData.append("telefono", telefono);
       formData.append("marca", marca);
       formData.append("modelo", modeloAnio);
@@ -761,6 +782,7 @@ placaInput.addEventListener("input", function (e) {
       formData.append("trabajo", trabajo);
       formData.append("observaciones", observaciones);
       formData.append("elementosVerificados", elementos.join(", "));
+
 
       const maxFotos = Math.min(fotosArchivos.length, 5);
       for (let i = 0; i < maxFotos; i++) {
@@ -795,6 +817,8 @@ placaInput.addEventListener("input", function (e) {
 
         // ✅ Mostrar toast en lugar de alert
         showToast("Formulario enviado correctamente ✔️");
+         // 🧾 Abrir diálogo de impresión (puedes guardar como PDF)
+  window.print();
 
       } catch (err) {
         console.error("Error en fetch:", err);
@@ -804,11 +828,11 @@ placaInput.addEventListener("input", function (e) {
         if (loadingOverlay) loadingOverlay.classList.remove("active");
         submitBtn.disabled = false;
       }
-        // 🧾 Abrir diálogo de impresión (puedes guardar como PDF)
-  window.print();
+       
 
 
       // Limpiar formulario
+           document.getElementById("empresa").value = "";
       document.getElementById("cliente").value = "";
       document.getElementById("telefono").value = "";
       document.getElementById("marca").value = "";
@@ -843,6 +867,7 @@ placaInput.addEventListener("input", function (e) {
   </script>
 </body>
 </html>
+
 
 
 
