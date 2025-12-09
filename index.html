@@ -382,6 +382,29 @@
     .toast.show {
       opacity: 1;
     }
+    @media print {
+  body {
+    background: #fff;
+  }
+
+  body::before {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .buttons,
+  .output,
+  .toast {
+    display: none !important;
+  }
+}
+
 
     /* ====== RESPONSIVO EN TABLET / PC ====== */
     @media (min-width: 768px) {
@@ -781,6 +804,9 @@ placaInput.addEventListener("input", function (e) {
         if (loadingOverlay) loadingOverlay.classList.remove("active");
         submitBtn.disabled = false;
       }
+        // 🧾 Abrir diálogo de impresión (puedes guardar como PDF)
+  window.print();
+
 
       // Limpiar formulario
       document.getElementById("cliente").value = "";
@@ -817,6 +843,7 @@ placaInput.addEventListener("input", function (e) {
   </script>
 </body>
 </html>
+
 
 
 
