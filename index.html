@@ -382,33 +382,34 @@
     .toast.show {
       opacity: 1;
     }
+
+    /* ====== MODO IMPRESIÓN / PDF ====== */
     @media print {
-  body {
-    background: #fff !important;
-    color: #000 !important;        /* 👈 texto negro */
-  }
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
 
-  body::before {
-    display: none !important;
-  }
+      body::before {
+        display: none !important;
+      }
 
-  .card {
-    box-shadow: none;
-    border: 1px solid #ccc;
-    margin: 0;
-    max-width: 100%;
-    background: #fff !important;   /* 👈 fondo blanco en la tarjeta */
-    color: #000 !important;        /* 👈 texto negro dentro de la tarjeta */
-  }
+      .card {
+        display: none !important;    /* No imprimimos el formulario */
+      }
 
-  .buttons,
-  .output,
-  .toast {
-    display: none !important;
-  }
-}
+      #comprobante {
+        display: block !important;   /* Solo comprobante */
+        color: #000 !important;
+      }
 
-
+      .buttons,
+      .output,
+      .toast,
+      .loading-overlay {
+        display: none !important;
+      }
+    }
 
     /* ====== RESPONSIVO EN TABLET / PC ====== */
     @media (min-width: 768px) {
@@ -470,14 +471,15 @@
     </div>
   </div>
 
+  <!-- FORMULARIO PRINCIPAL -->
   <div class="card">
     <div class="header-logo">
       <img src="lfp-logo.jpg" alt="LFP Soluciones Automotrices">
     </div>
 
-      <h1>RECEPCIÓN DE VEHÍCULO</h1>
+    <h1>RECEPCIÓN DE VEHÍCULO</h1>
 
-      <!-- DATOS GENERALES -->
+    <!-- DATOS GENERALES -->
     <h2>Datos generales</h2>
 
     <div class="input-row">
@@ -519,7 +521,6 @@
       </div>
     </div>
 
-    
     <!-- DATOS DEL VEHÍCULO -->
     <h2>Datos del Vehículo</h2>
     <div class="input-row">
@@ -617,6 +618,40 @@
     </div>
   </div>
 
+  <!-- COMPROBANTE SOLO PARA IMPRESIÓN / PDF -->
+  <div id="comprobante" style="display:none; padding: 20px; max-width: 700px; margin: 0 auto;">
+    <h1 style="text-align:center; margin-bottom: 10px;">Recepción de Vehículo</h1>
+    <p><strong>Fecha:</strong> <span id="c_fecha"></span></p>
+
+    <h2>Datos generales</h2>
+    <p><strong>Compañía de seguro:</strong> <span id="c_seguro"></span></p>
+    <p><strong>Empresa:</strong> <span id="c_empresa"></span></p>
+
+    <h2>Datos del cliente</h2>
+    <p><strong>Nombre:</strong> <span id="c_cliente"></span></p>
+    <p><strong>Teléfono:</strong> <span id="c_telefono"></span></p>
+
+    <h2>Datos del vehículo</h2>
+    <p><strong>Marca:</strong> <span id="c_marca"></span></p>
+    <p><strong>Modelo / Año:</strong> <span id="c_modelo"></span></p>
+    <p><strong>Placa:</strong> <span id="c_placa"></span></p>
+    <p><strong>Color:</strong> <span id="c_color"></span></p>
+
+    <h2>Elementos verificados</h2>
+    <p><span id="c_elementos"></span></p>
+
+    <h2>Trabajo a realizar</h2>
+    <p><span id="c_trabajo"></span></p>
+
+    <h2>Observaciones</h2>
+    <p><span id="c_observaciones"></span></p>
+
+    <h2>Firma del cliente</h2>
+    <div style="border:1px solid #000; padding:10px; width:100%; max-width:400px;">
+      <img id="c_firma" alt="Firma" style="max-width:100%; height:auto;" />
+    </div>
+  </div>
+
   <script>
     const canvas = document.getElementById("signature-pad");
     const clearBtn = document.getElementById("clear-btn");
@@ -630,16 +665,15 @@
     const loadingOverlay = document.getElementById("loading-overlay");
     const placaInput = document.getElementById("placa");
 
-placaInput.setAttribute("autocapitalize", "characters");  // fuerza teclado en mayúscula
-placaInput.setAttribute("autocomplete", "off"); 
-placaInput.setAttribute("autocorrect", "off");
+    placaInput.setAttribute("autocapitalize", "characters");  // fuerza teclado en mayúscula
+    placaInput.setAttribute("autocomplete", "off");
+    placaInput.setAttribute("autocorrect", "off");
 
-placaInput.addEventListener("input", function (e) {
-  const pos = this.selectionStart; 
-  this.value = this.value.toUpperCase();
-  this.setSelectionRange(pos, pos);  // mantiene la posición del cursor
-});
-
+    placaInput.addEventListener("input", function (e) {
+      const pos = this.selectionStart;
+      this.value = this.value.toUpperCase();
+      this.setSelectionRange(pos, pos);  // mantiene la posición del cursor
+    });
 
     function showToast(message) {
       const toast = document.getElementById("toast");
@@ -737,17 +771,17 @@ placaInput.addEventListener("input", function (e) {
 
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwQ2dWFOIrcufFyaeMkWV_SJbothm_AuZ4LRGGZzNR8A5SjaZIUD_eqhOK-ZyqCi6iI/exec";
 
-   submitBtn.addEventListener("click", async () => {
-  const cliente = document.getElementById("cliente").value.trim();
-  const seguro  = document.getElementById("seguro").value.trim();
-  const empresa = document.getElementById("empresa").value.trim(); // 👈 NUEVO
-  const telefono = document.getElementById("telefono").value.trim();
-  const marca = document.getElementById("marca").value.trim();
-  const modeloAnio = document.getElementById("modeloAnio").value.trim();
-  const placa = document.getElementById("placa").value.trim();
-  const color = document.getElementById("color").value.trim();
-  const trabajo = document.getElementById("trabajo").value.trim();
-  const observaciones = document.getElementById("observaciones").value.trim();
+    submitBtn.addEventListener("click", async () => {
+      const cliente = document.getElementById("cliente").value.trim();
+      const seguro  = document.getElementById("seguro").value.trim();
+      const empresa = document.getElementById("empresa").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const marca = document.getElementById("marca").value.trim();
+      const modeloAnio = document.getElementById("modeloAnio").value.trim();
+      const placa = document.getElementById("placa").value.trim();
+      const color = document.getElementById("color").value.trim();
+      const trabajo = document.getElementById("trabajo").value.trim();
+      const observaciones = document.getElementById("observaciones").value.trim();
 
       if (!cliente || !telefono || !marca || !modeloAnio || !placa) {
         alert("Completa todos los datos obligatorios");
@@ -769,10 +803,10 @@ placaInput.addEventListener("input", function (e) {
 
       const fotosArchivos = fotosAcumuladas;
 
-           const formData = new FormData();
+      const formData = new FormData();
       formData.append("cliente", cliente);
       formData.append("seguro", seguro);
-      formData.append("empresa", empresa);  // 👈 NUEVO
+      formData.append("empresa", empresa);
       formData.append("telefono", telefono);
       formData.append("marca", marca);
       formData.append("modelo", modeloAnio);
@@ -781,7 +815,6 @@ placaInput.addEventListener("input", function (e) {
       formData.append("trabajo", trabajo);
       formData.append("observaciones", observaciones);
       formData.append("elementosVerificados", elementos.join(", "));
-
 
       const maxFotos = Math.min(fotosArchivos.length, 5);
       for (let i = 0; i < maxFotos; i++) {
@@ -814,10 +847,32 @@ placaInput.addEventListener("input", function (e) {
           audioGracias.play().catch(() => {});
         }
 
-        // ✅ Mostrar toast en lugar de alert
+        // ✅ Mostrar toast
         showToast("Formulario enviado correctamente ✔️");
-         // 🧾 Abrir diálogo de impresión (puedes guardar como PDF)
-  window.print();
+
+        // 🧾 RELLENAR COMPROBANTE ANTES DE IMPRIMIR
+        const ahora = new Date();
+        document.getElementById("c_fecha").textContent =
+          ahora.toLocaleDateString() + " " + ahora.toLocaleTimeString();
+
+        document.getElementById("c_seguro").textContent = seguro || "—";
+        document.getElementById("c_empresa").textContent = empresa || "—";
+        document.getElementById("c_cliente").textContent = cliente || "—";
+        document.getElementById("c_telefono").textContent = telefono || "—";
+        document.getElementById("c_marca").textContent = marca || "—";
+        document.getElementById("c_modelo").textContent = modeloAnio || "—";
+        document.getElementById("c_placa").textContent = placa || "—";
+        document.getElementById("c_color").textContent = color || "—";
+        document.getElementById("c_trabajo").textContent = trabajo || "—";
+        document.getElementById("c_observaciones").textContent = observaciones || "—";
+        document.getElementById("c_elementos").textContent =
+          elementos.length ? elementos.join(", ") : "Sin elementos marcados";
+
+        // Firma en el comprobante
+        document.getElementById("c_firma").src = firmaDataURL;
+
+        // 🧾 Abrir diálogo de impresión (desde aquí ya se ve en PDF)
+        window.print();
 
       } catch (err) {
         console.error("Error en fetch:", err);
@@ -827,11 +882,9 @@ placaInput.addEventListener("input", function (e) {
         if (loadingOverlay) loadingOverlay.classList.remove("active");
         submitBtn.disabled = false;
       }
-       
-
 
       // Limpiar formulario
-           document.getElementById("empresa").value = "";
+      document.getElementById("empresa").value = "";
       document.getElementById("cliente").value = "";
       document.getElementById("telefono").value = "";
       document.getElementById("marca").value = "";
@@ -866,6 +919,8 @@ placaInput.addEventListener("input", function (e) {
   </script>
 </body>
 </html>
+
+
 
 
 
