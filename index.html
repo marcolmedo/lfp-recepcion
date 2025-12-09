@@ -384,7 +384,8 @@
     }
     @media print {
   body {
-    background: #fff;
+    background: #fff !important;
+    color: #000 !important;        /* 👈 texto negro */
   }
 
   body::before {
@@ -396,6 +397,8 @@
     border: 1px solid #ccc;
     margin: 0;
     max-width: 100%;
+    background: #fff !important;   /* 👈 fondo blanco en la tarjeta */
+    color: #000 !important;        /* 👈 texto negro dentro de la tarjeta */
   }
 
   .buttons,
@@ -404,6 +407,7 @@
     display: none !important;
   }
 }
+
 
 
     /* ====== RESPONSIVO EN TABLET / PC ====== */
@@ -862,6 +866,7 @@ placaInput.addEventListener("input", function (e) {
   </script>
 </body>
 </html>
+
 
 
 
