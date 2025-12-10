@@ -482,6 +482,500 @@
           <option value="Credinform">Credinform</option>
           <option value="Fortaleza Seguros">Fortaleza Seguros</option>
           <option value="La Boliviana Ciacruz">La Boliviana Ciacruz</option>
+          <option value="Mercantil Santa Cruz">Mercantil Santa C<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Recepción de Vehículo - LFP SRL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- PWA / APP -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050505">
+
+  <!-- iOS (Safari) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Favicon e íconos Android -->
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="web-app-manifest-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="web-app-manifest-512x512.png">
+
+  <!-- Signature Pad desde CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  <!-- html2canvas para capturar la tarjeta como imagen -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      margin: 0;
+      padding: 16px 12px;
+      background: #050505;   /* color base */
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      position: relative;    /* necesario para el ::before */
+      overflow-x: hidden;
+    }
+
+    /* Fondo tipo bandera de meta con el logo en diagonal */
+    body::before {
+      content: "";
+      position: fixed;
+      top: -250px;
+      left: -250px;
+      right: -250px;
+      bottom: -250px;
+      background-image: url("lfp-water.png");
+      background-repeat: repeat;
+      background-size: 180px;
+      opacity: 0.18;
+      transform: rotate(-25deg);
+      transform-origin: center;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    h1, h2 {
+      font-weight: 600;
+      letter-spacing: -0.3px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      margin-top: 22px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 4px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 650px;
+      margin: 8px auto 24px;
+      background: #181818;
+      border-radius: 18px;
+      padding: 20px 16px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
+      border: 1px solid #262626;
+    }
+
+    /* LOGO RESPONSIVO */
+    .header-logo {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .header-logo img {
+      width: 100%;
+      max-width: 420px;
+      display: block;
+      margin: 0 auto 8px;
+      border-radius: 8px;
+    }
+
+    .small {
+      font-size: 0.75rem;
+      color: #b3b3b3;
+      margin-top: 4px;
+    }
+
+    .label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #e5e5e5;
+      margin-bottom: 4px;
+    }
+
+    .field {
+      margin-bottom: 12px;
+      width: 100%;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* dos columnas cuando haya .half dentro de .input-row */
+    .half {
+      flex: 1;
+      min-width: 48%;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #222;
+      background: #0f0f0f;
+      color: #fff;
+      font-size: 0.9rem;
+      transition: 0.15s ease;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #222;
+      background: #0f0f0f;
+      color: #fff;
+      font-size: 0.9rem;
+      transition: 0.15s ease;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #e50914;
+      box-shadow: 0 0 0 1px #e50914;
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #e50914;
+      box-shadow: 0 0 0 1px #e50914;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px 12px;
+      margin-top: 6px;
+      width: 100%;
+    }
+
+    .check-item {
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #ddd;
+      padding: 4px 0;
+      line-height: 1.2;
+    }
+
+    .check-item input {
+      accent-color: #e50914;
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    #signature-container {
+      border: 1px solid #444;
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+      position: relative;
+      height: 220px;
+      margin-top: 6px;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .btn-clear {
+      background: #333;
+      color: #fff;
+      flex: 1;
+    }
+
+    .btn-save {
+      background: #e50914;
+      color: #fff;
+      flex: 2;
+    }
+
+    .output {
+      margin-top: 14px;
+      font-size: 0.8rem;
+      word-break: break-all;
+      color: #aaa;
+      white-space: pre-wrap;
+    }
+
+    .preview {
+      margin-top: 12px;
+      background: #fff;
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .preview img {
+      max-width: 100%;
+    }
+
+    /* ====== ESTILOS INPUT DE FOTOS PERSONALIZADO ====== */
+    .file-input-wrapper {
+      margin-top: 6px;
+      position: relative;
+    }
+
+    .file-input-display {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #0f0f0f;
+      border-radius: 12px;
+      border: 1px solid #222;
+      padding: 8px 10px;
+    }
+
+    .file-input-button {
+      background: #ffffff;
+      color: #000;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .file-input-text {
+      font-size: 0.85rem;
+      color: #ddd;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Ocultar el input real pero seguir siendo clickeable */
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* ========== LOADER CON LOGO FIJO + ARO GIRANDO ========== */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .loader-wrapper {
+      position: relative;
+      width: 140px;
+      height: 140px;
+    }
+
+    .loader-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      border: 3px solid rgba(255, 255, 255, 0.18);
+      border-top-color: #e50914;
+      border-right-color: #e50914;
+      animation: spinRing 0.9s linear infinite;
+    }
+
+    .loader-logo {
+      position: absolute;
+      width: 85%;
+      max-width: 85%;
+      height: auto;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      object-fit: contain;
+    }
+
+    @keyframes spinRing {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ====== TOAST (mensaje flotante) ====== */
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f0f0f;
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 12px;
+      border: 1px solid #e50914;
+      font-size: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 99999;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+
+    @media print {
+      body {
+        background: #fff !important;
+        color: #000 !important;
+      }
+
+      body::before {
+        display: none !important;
+      }
+
+      .card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        margin: 0;
+        max-width: 100%;
+        background: #fff !important;
+        color: #000 !important;
+      }
+
+      .buttons,
+      .output,
+      .toast {
+        display: none !important;
+      }
+    }
+
+    /* ====== RESPONSIVO EN TABLET / PC ====== */
+    @media (min-width: 768px) {
+      body {
+        padding: 32px 16px;
+      }
+
+      .card {
+        max-width: 700px;
+        border-radius: 20px;
+        padding: 28px 24px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      h2 {
+        font-size: 1.35rem;
+      }
+
+      .label,
+      .small {
+        font-size: 0.95rem;
+      }
+
+      input,
+      textarea,
+      select {
+        font-size: 1rem;
+        padding: 14px 16px;
+      }
+
+      .check-item {
+        font-size: 0.95rem;
+      }
+
+      .loader-wrapper {
+        width: 170px;
+        height: 170px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- AUDIO PARA EL MENSAJE DE GRACIAS -->
+  <audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
+
+  <!-- TOAST (mensaje sin alert) -->
+  <div id="toast" class="toast">Formulario enviado correctamente ✔️</div>
+
+  <!-- OVERLAY DE CARGA CON LOGO FIJO + ARO GIRANDO -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="loader-wrapper">
+      <div class="loader-ring"></div>
+      <img src="lfp-water.png" class="loader-logo" alt="Cargando LFP...">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="header-logo">
+      <img src="lfp-logo.jpg" alt="LFP Soluciones Automotrices">
+    </div>
+
+    <h1>RECEPCIÓN DE VEHÍCULO</h1>
+
+    <!-- DATOS GENERALES -->
+    <h2>Datos generales</h2>
+
+    <div class="input-row">
+      <div class="field half">
+        <div class="label">Compañía de seguro</div>
+        <select id="seguro">
+          <option value="">Seleccionar...</option>
+          <option value="Particular">Particular</option>
+          <option value="Alianza Seguros">Alianza Seguros</option>
+          <option value="Bisa Seguros">Bisa Seguros</option>
+          <option value="Credinform">Credinform</option>
+          <option value="Fortaleza Seguros">Fortaleza Seguros</option>
+          <option value="La Boliviana Ciacruz">La Boliviana Ciacruz</option>
           <option value="Mercantil Santa Cruz">Mercantil Santa Cruz</option>
           <option value="Nacional Seguros">Nacional Seguros</option>
           <option value="Unibienes">Unibienes</option>
@@ -582,6 +1076,7 @@
             No has seleccionado fotos
           </div>
         </div>
+        <!-- importante: cámara por defecto, se pueden acumular 5 -->
         <input type="file" id="fotos" accept="image/*" capture="environment" multiple>
       </div>
       <p class="small">Máximo 5 fotos por registro.</p>
@@ -596,7 +1091,7 @@
     <div class="buttons">
       <button type="button" class="btn-clear" id="clear-btn">Borrar firma</button>
       <button type="button" class="btn-save" id="submit-btn">Enviar</button>
-      <button type="button" class="btn-print" id="print-btn">Imprimir PDF</button>
+      <button type="button" class="btn-save" id="share-btn">Enviar por WhatsApp</button>
     </div>
 
     <div class="output" id="output"></div>
@@ -611,7 +1106,7 @@
     const canvas = document.getElementById("signature-pad");
     const clearBtn = document.getElementById("clear-btn");
     const submitBtn = document.getElementById("submit-btn");
-    const printBtn = document.getElementById("print-btn");
+    const shareBtn = document.getElementById("share-btn");
     const output = document.getElementById("output");
     const preview = document.getElementById("preview");
     const signatureImage = document.getElementById("signature-image");
@@ -620,8 +1115,9 @@
     const audioGracias = document.getElementById("audio-gracias");
     const loadingOverlay = document.getElementById("loading-overlay");
     const placaInput = document.getElementById("placa");
+    const card = document.querySelector(".card");
 
-    // PLACA SIEMPRE EN MAYÚSCULA
+    // Forzar mayúsculas en placa
     placaInput.setAttribute("autocapitalize", "characters");
     placaInput.setAttribute("autocomplete", "off");
     placaInput.setAttribute("autocorrect", "off");
@@ -640,50 +1136,37 @@
       setTimeout(() => toast.classList.remove("show"), 2500);
     }
 
+    function resizeCanvas() {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      const container = document.getElementById("signature-container");
+      canvas.width = container.clientWidth * ratio;
+      canvas.height = container.clientHeight * ratio;
+      canvas.getContext("2d").scale(ratio, ratio);
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
     const signaturePad = new SignaturePad(canvas, {
-  backgroundColor: "white",
-  penColor: "black"
-});
-
-function resizeCanvas() {
-  const ratio = Math.max(window.devicePixelRatio || 1, 1);
-  const container = document.getElementById("signature-container");
-
-  // Guardar la firma actual (si hay)
-  let data = null;
-  if (!signaturePad.isEmpty()) {
-    data = signaturePad.toData();   // guarda los trazos
-  }
-
-  // Redimensionar el canvas
-  canvas.width  = container.clientWidth * ratio;
-  canvas.height = container.clientHeight * ratio;
-  const ctx = canvas.getContext("2d");
-  ctx.scale(ratio, ratio);
-
-  // Volver a dibujar la firma
-  signaturePad.clear();
-  if (data) {
-    signaturePad.fromData(data);
-  }
-}
-
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
-
+      backgroundColor: "white",
+      penColor: "black"
+    });
 
     clearBtn.addEventListener("click", () => {
       signaturePad.clear();
       preview.style.display = "none";
     });
 
-    // FOTOS ACUMULADAS (hasta 5)
+    // Acumulador de fotos para permitir abrir cámara varias veces
     let fotosAcumuladas = [];
 
     fotosInput.addEventListener("change", () => {
       const nuevas = Array.from(fotosInput.files || []);
+
+      // Acumulamos y limitamos a 5 fotos
       fotosAcumuladas = [...fotosAcumuladas, ...nuevas].slice(0, 5);
 
+      // Texto del label
       if (fotosAcumuladas.length === 0) {
         fileLabelText.textContent = "No has seleccionado fotos";
       } else if (fotosAcumuladas.length === 1) {
@@ -692,10 +1175,11 @@ resizeCanvas();
         fileLabelText.textContent = `${fotosAcumuladas.length} fotos seleccionadas`;
       }
 
+      // Importante: limpiar input para poder volver a abrir cámara/galería
       fotosInput.value = "";
     });
 
-    // COMPRIMIR Y PASAR A BASE64
+    // Convierte el archivo a Base64 pero antes lo comprime
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -736,51 +1220,9 @@ resizeCanvas();
       });
     }
 
-    // URL del WebApp de Apps Script
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwQ2dWFOIrcufFyaeMkWV_SJbothm_AuZ4LRGGZzNR8A5SjaZIUD_eqhOK-ZyqCi6iI/exec";
 
-    // Función para limpiar el formulario (solo se usa después de ENVIAR)
-    function limpiarFormulario() {
-      document.getElementById("empresa").value = "";
-      document.getElementById("cliente").value = "";
-      document.getElementById("telefono").value = "";
-      document.getElementById("marca").value = "";
-      document.getElementById("modeloAnio").value = "";
-      document.getElementById("placa").value = "";
-      document.getElementById("color").value = "";
-      document.getElementById("trabajo").value = "";
-      document.getElementById("observaciones").value = "";
-      document.getElementById("fotos").value = "";
-      document.getElementById("seguro").value = "";
-
-      signaturePad.clear();
-      preview.style.display = "none";
-
-      document
-        .querySelectorAll('input[name="elementos"]:checked')
-        .forEach(el => (el.checked = false));
-
-      fotosAcumuladas = [];
-      fileLabelText.textContent = "No has seleccionado fotos";
-    }
-
-    // BOTÓN IMPRIMIR PDF (NO ENVÍA, NO LIMPIA)
-    printBtn.addEventListener("click", () => {
-      const handleAfterPrint = () => {
-        if (audioGracias) {
-          audioGracias.currentTime = 0;
-          audioGracias.play().catch(() => {});
-        }
-        window.removeEventListener("afterprint", handleAfterPrint);
-      };
-
-      window.addEventListener("afterprint", handleAfterPrint);
-
-      // Abre el diálogo de impresión (ahí eliges Guardar como PDF)
-      window.print();
-    });
-
-    // BOTÓN ENVIAR (solo Apps Script + toast + limpiar)
+    // Enviar (guardar en Sheets / Drive)
     submitBtn.addEventListener("click", async () => {
       const cliente = document.getElementById("cliente").value.trim();
       const seguro  = document.getElementById("seguro").value.trim();
@@ -850,8 +1292,17 @@ resizeCanvas();
         });
 
         output.textContent = "Formulario enviado correctamente ✔️";
+
+        // Audio de gracias
+        if (audioGracias) {
+          audioGracias.currentTime = 0;
+          audioGracias.play().catch(() => {});
+        }
+
         showToast("Formulario enviado correctamente ✔️");
-        limpiarFormulario();
+
+        // NOTA: No limpiamos el formulario aquí para que luego puedas usar "Enviar por WhatsApp"
+        // y la firma no se pierda. Para un nuevo cliente, puedes borrar manualmente o recargar.
 
       } catch (err) {
         console.error("Error en fetch:", err);
@@ -863,7 +1314,63 @@ resizeCanvas();
       }
     });
 
-    // Service Worker PWA
+    // Botón Enviar por WhatsApp (captura la tarjeta como imagen)
+    shareBtn.addEventListener("click", async () => {
+      const telefono = document.getElementById("telefono").value.trim();
+
+      if (!telefono) {
+        alert("Primero completa el teléfono del cliente.");
+        return;
+      }
+
+      try {
+        const canvasCaptura = await html2canvas(card, {
+          scale: 2,
+          useCORS: true,
+          scrollY: -window.scrollY
+        });
+
+        const dataUrl = canvasCaptura.toDataURL("image/png");
+        const res = await fetch(dataUrl);
+        const blob = await res.blob();
+        const file = new File([blob], "recepcion-vehiculo.png", { type: "image/png" });
+
+        const numeroLimpio = telefono.replace(/\D/g, "");
+        const numeroConCodigo = numeroLimpio.startsWith("591")
+          ? numeroLimpio
+          : "591" + numeroLimpio;
+
+        const textoMensaje = `Hola, adjunto la ficha de recepción de su vehículo.\n\nWhatsApp: https://wa.me/${numeroConCodigo}`;
+
+        // Intentar Web Share API con archivo
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            text: textoMensaje,
+            title: "Recepción de vehículo - LFP SRL"
+          });
+        } else {
+          // Fallback: descarga la imagen y abre el chat de WhatsApp
+          const linkDescarga = document.createElement("a");
+          linkDescarga.href = dataUrl;
+          linkDescarga.download = "recepcion-vehiculo.png";
+          document.body.appendChild(linkDescarga);
+          linkDescarga.click();
+          document.body.removeChild(linkDescarga);
+
+          const mensaje = encodeURIComponent("Hola, adjunto la ficha de recepción de su vehículo.");
+          const urlWA = `https://wa.me/${numeroConCodigo}?text=${mensaje}`;
+          window.open(urlWA, "_blank");
+
+          alert("Se descargó la imagen del formulario. Adjunta esa imagen desde tu galería/archivos en WhatsApp.");
+        }
+      } catch (err) {
+        console.error("Error al generar o compartir la captura:", err);
+        alert("Ocurrió un error al generar la captura para WhatsApp.");
+      }
+    });
+
+    // Registro del Service Worker para PWA
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
@@ -874,6 +1381,8 @@ resizeCanvas();
   </script>
 </body>
 </html>
+
+
 
 
 
