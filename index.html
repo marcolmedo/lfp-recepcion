@@ -243,6 +243,12 @@
       flex: 2;
     }
 
+    .btn-print {
+      background: #ffffff;
+      color: #000;
+      flex: 2;
+    }
+
     .output {
       margin-top: 14px;
       font-size: 0.8rem;
@@ -383,22 +389,10 @@
 
     /* IMPRESIÓN (PDF) */
     @media print {
-      body {
-        background: #fff !important;
-        color: #000 !important;
-      }
-
-      body::before {
-        display: none !important;
-      }
-
+      body,
       .card {
-        box-shadow: none;
-        border: 1px solid #ccc;
-        margin: 0;
-        max-width: 100%;
-        background: #fff !important;
-        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
 
       .buttons,
@@ -602,6 +596,7 @@
     <div class="buttons">
       <button type="button" class="btn-clear" id="clear-btn">Borrar firma</button>
       <button type="button" class="btn-save" id="submit-btn">Enviar</button>
+      <button type="button" class="btn-print" id="print-btn">Imprimir PDF</button>
     </div>
 
     <div class="output" id="output"></div>
@@ -616,6 +611,7 @@
     const canvas = document.getElementById("signature-pad");
     const clearBtn = document.getElementById("clear-btn");
     const submitBtn = document.getElementById("submit-btn");
+    const printBtn = document.getElementById("print-btn");
     const output = document.getElementById("output");
     const preview = document.getElementById("preview");
     const signatureImage = document.getElementById("signature-image");
@@ -724,9 +720,10 @@
       });
     }
 
+    // URL del WebApp de Apps Script
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwQ2dWFOIrcufFyaeMkWV_SJbothm_AuZ4LRGGZzNR8A5SjaZIUD_eqhOK-ZyqCi6iI/exec";
 
-    // Función para limpiar el formulario (la llamaremos DESPUÉS de imprimir)
+    // Función para limpiar el formulario (solo se usa después de ENVIAR)
     function limpiarFormulario() {
       document.getElementById("empresa").value = "";
       document.getElementById("cliente").value = "";
@@ -751,7 +748,23 @@
       fileLabelText.textContent = "No has seleccionado fotos";
     }
 
-    // BOTÓN ENVIAR (envía, audio, imprime, luego limpia)
+    // BOTÓN IMPRIMIR PDF (NO ENVÍA, NO LIMPIA)
+    printBtn.addEventListener("click", () => {
+      const handleAfterPrint = () => {
+        if (audioGracias) {
+          audioGracias.currentTime = 0;
+          audioGracias.play().catch(() => {});
+        }
+        window.removeEventListener("afterprint", handleAfterPrint);
+      };
+
+      window.addEventListener("afterprint", handleAfterPrint);
+
+      // Abre el diálogo de impresión (ahí eliges Guardar como PDF)
+      window.print();
+    });
+
+    // BOTÓN ENVIAR (solo Apps Script + toast + limpiar)
     submitBtn.addEventListener("click", async () => {
       const cliente = document.getElementById("cliente").value.trim();
       const seguro  = document.getElementById("seguro").value.trim();
@@ -813,8 +826,6 @@
       preview.style.display = "none";
       output.textContent = "";
 
-      let envioExitoso = false;
-
       try {
         await fetch(WEBAPP_URL, {
           method: "POST",
@@ -822,7 +833,10 @@
           mode: "no-cors"
         });
 
-        envioExitoso = true;
+        output.textContent = "Formulario enviado correctamente ✔️";
+        showToast("Formulario enviado correctamente ✔️");
+        limpiarFormulario();
+
       } catch (err) {
         console.error("Error en fetch:", err);
         output.textContent = "Error en fetch:\n" + err;
@@ -831,33 +845,6 @@
         if (loadingOverlay) loadingOverlay.classList.remove("active");
         submitBtn.disabled = false;
       }
-
-      if (!envioExitoso) {
-        return; // no imprimir ni limpiar si falló el envío
-      }
-
-      // ÉXITO: mostrar mensaje, audio y luego imprimir
-      output.textContent = "Formulario enviado correctamente ✔️";
-
-      if (audioGracias) {
-        audioGracias.currentTime = 0;
-        audioGracias.play().catch(() => {});
-      }
-
-      showToast("Formulario enviado correctamente ✔️");
-
-      // Limpiar DESPUÉS de que el usuario cierre el diálogo de impresión
-      const handleAfterPrint = () => {
-        limpiarFormulario();
-        window.removeEventListener("afterprint", handleAfterPrint);
-      };
-
-      window.addEventListener("afterprint", handleAfterPrint);
-
-      // Pequeño delay para asegurarnos que el navegador pinte bien antes de imprimir
-      setTimeout(() => {
-        window.print();
-      }, 200);
     });
 
     // Service Worker PWA
@@ -871,6 +858,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 
