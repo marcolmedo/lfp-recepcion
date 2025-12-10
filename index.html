@@ -24,7 +24,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    * ,
+    *,
     *::before,
     *::after {
       box-sizing: border-box;
@@ -34,15 +34,15 @@
       font-family: "Inter", sans-serif;
       margin: 0;
       padding: 16px 12px;
-      background: #050505;   /* color base */
+      background: #050505;
       color: #fff;
       display: flex;
       justify-content: center;
-      position: relative;    /* necesario para el ::before */
+      position: relative;
       overflow-x: hidden;
     }
 
-    /* Fondo tipo bandera de meta con el logo en diagonal */
+    /* Fondo tipo bandera con logo en diagonal */
     body::before {
       content: "";
       position: fixed;
@@ -128,7 +128,6 @@
       flex-wrap: wrap;
     }
 
-    /* dos columnas cuando haya .half dentro de .input-row */
     .half {
       flex: 1;
       min-width: 48%;
@@ -238,16 +237,16 @@
       flex: 1;
     }
 
-    .btn-print {
-      background: #555;
-      color: #fff;
-      flex: 1;
-    }
-
     .btn-save {
       background: #e50914;
       color: #fff;
       flex: 2;
+    }
+
+    .btn-print {
+      background: #ffffff;
+      color: #000;
+      flex: 1;
     }
 
     .output {
@@ -270,7 +269,7 @@
       max-width: 100%;
     }
 
-    /* ====== ESTILOS INPUT DE FOTOS PERSONALIZADO ====== */
+    /* INPUT FOTOS PERSONALIZADO */
     .file-input-wrapper {
       margin-top: 6px;
       position: relative;
@@ -305,7 +304,6 @@
       white-space: nowrap;
     }
 
-    /* Ocultar el input real pero seguir siendo clickeable */
     .file-input-wrapper input[type="file"] {
       position: absolute;
       inset: 0;
@@ -313,7 +311,7 @@
       cursor: pointer;
     }
 
-    /* ========== LOADER CON LOGO FIJO + ARO GIRANDO ========== */
+    /* LOADER */
     .loading-overlay {
       position: fixed;
       inset: 0;
@@ -322,7 +320,6 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
-
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -368,7 +365,7 @@
       }
     }
 
-    /* ====== TOAST (mensaje flotante) ====== */
+    /* TOAST */
     .toast {
       position: fixed;
       bottom: 25px;
@@ -385,11 +382,12 @@
       transition: opacity 0.4s ease;
       z-index: 99999;
     }
+
     .toast.show {
       opacity: 1;
     }
 
-    /* ====== MODO IMPRESIÓN / PDF ====== */
+    /* ESTILOS PARA IMPRESIÓN (PDF) */
     @media print {
       body {
         background: #fff !important;
@@ -411,20 +409,19 @@
 
       .buttons,
       .output,
-      .toast,
-      .loading-overlay {
+      .toast {
         display: none !important;
       }
     }
 
-    /* ====== RESPONSIVO EN TABLET / PC ====== */
+    /* RESPONSIVO TABLET / PC */
     @media (min-width: 768px) {
       body {
         padding: 32px 16px;
       }
 
       .card {
-        max-width: 700px;          /* más ancho aún en tablet */
+        max-width: 700px;
         border-radius: 20px;
         padding: 28px 24px;
       }
@@ -465,22 +462,20 @@
   <!-- AUDIO PARA EL MENSAJE DE GRACIAS -->
   <audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
 
-  <!-- TOAST (mensaje sin alert) -->
+  <!-- TOAST -->
   <div id="toast" class="toast">Formulario enviado correctamente ✔️</div>
 
-  <!-- OVERLAY DE CARGA CON LOGO FIJO + ARO GIRANDO -->
+  <!-- OVERLAY DE CARGA -->
   <div id="loading-overlay" class="loading-overlay">
     <div class="loader-wrapper">
       <div class="loader-ring"></div>
-      <!-- usa el mismo PNG transparente del fondo -->
-      <img src="lfp-water.png" class="loader-logo" alt="Cargando LFP...">
+      <img src="lfp-water.png" class="loader-logo" alt="Cargando LFP..." />
     </div>
   </div>
 
-  <!-- FORMULARIO PRINCIPAL -->
   <div class="card">
     <div class="header-logo">
-      <img src="lfp-logo.jpg" alt="LFP Soluciones Automotrices">
+      <img src="lfp-logo.jpg" alt="LFP Soluciones Automotrices" />
     </div>
 
     <h1>RECEPCIÓN DE VEHÍCULO</h1>
@@ -599,7 +594,6 @@
             No has seleccionado fotos
           </div>
         </div>
-        <!-- importante: cámara por defecto, se pueden acumular 5 -->
         <input type="file" id="fotos" accept="image/*" capture="environment" multiple>
       </div>
       <p class="small">Máximo 5 fotos por registro.</p>
@@ -628,8 +622,8 @@
   <script>
     const canvas = document.getElementById("signature-pad");
     const clearBtn = document.getElementById("clear-btn");
-    const printBtn = document.getElementById("print-btn");
     const submitBtn = document.getElementById("submit-btn");
+    const printBtn = document.getElementById("print-btn");
     const output = document.getElementById("output");
     const preview = document.getElementById("preview");
     const signatureImage = document.getElementById("signature-image");
@@ -639,11 +633,12 @@
     const loadingOverlay = document.getElementById("loading-overlay");
     const placaInput = document.getElementById("placa");
 
+    // PLACA SIEMPRE EN MAYÚSCULA
     placaInput.setAttribute("autocapitalize", "characters");
     placaInput.setAttribute("autocomplete", "off");
     placaInput.setAttribute("autocorrect", "off");
 
-    placaInput.addEventListener("input", function (e) {
+    placaInput.addEventListener("input", function () {
       const pos = this.selectionStart;
       this.value = this.value.toUpperCase();
       this.setSelectionRange(pos, pos);
@@ -678,21 +673,13 @@
       preview.style.display = "none";
     });
 
-    // Botón solo para imprimir el formulario tal cual
-    printBtn.addEventListener("click", () => {
-      window.print();
-    });
-
-    // Acumulador de fotos para permitir abrir cámara varias veces
+    // FOTOS ACUMULADAS (hasta 5)
     let fotosAcumuladas = [];
 
     fotosInput.addEventListener("change", () => {
       const nuevas = Array.from(fotosInput.files || []);
-
-      // Acumulamos y limitamos a 5 fotos
       fotosAcumuladas = [...fotosAcumuladas, ...nuevas].slice(0, 5);
 
-      // Texto del label
       if (fotosAcumuladas.length === 0) {
         fileLabelText.textContent = "No has seleccionado fotos";
       } else if (fotosAcumuladas.length === 1) {
@@ -701,11 +688,10 @@
         fileLabelText.textContent = `${fotosAcumuladas.length} fotos seleccionadas`;
       }
 
-      // Importante: limpiar input para poder volver a abrir cámara/galería
       fotosInput.value = "";
     });
 
-    // Convierte el archivo a Base64 pero antes lo comprime
+    // COMPRIMIR Y PASAR A BASE64
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -748,6 +734,12 @@
 
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwQ2dWFOIrcufFyaeMkWV_SJbothm_AuZ4LRGGZzNR8A5SjaZIUD_eqhOK-ZyqCi6iI/exec";
 
+    // BOTÓN IMPRIMIR PDF (solo imprime, no envía)
+    printBtn.addEventListener("click", () => {
+      window.print();
+    });
+
+    // BOTÓN ENVIAR (solo envía, NO imprime)
     submitBtn.addEventListener("click", async () => {
       const cliente = document.getElementById("cliente").value.trim();
       const seguro  = document.getElementById("seguro").value.trim();
@@ -809,38 +801,31 @@
       preview.style.display = "none";
       output.textContent = "";
 
-     try {
-  await fetch(WEBAPP_URL, {
-    method: "POST",
-    body: formData,
-    mode: "no-cors"
-  });
+      try {
+        await fetch(WEBAPP_URL, {
+          method: "POST",
+          body: formData,
+          mode: "no-cors"
+        });
 
-  output.textContent = "Formulario enviado correctamente ✔️";
+        output.textContent = "Formulario enviado correctamente ✔️";
 
-  // 1) Reproducir audio de gracias lo antes posible
-  if (audioGracias) {
-    audioGracias.currentTime = 0;
-    audioGracias.play().catch(() => {});
-  }
+        // AUDIO SOLO AL ENVIAR CORRECTAMENTE
+        if (audioGracias) {
+          audioGracias.currentTime = 0;
+          audioGracias.play().catch(() => {});
+        }
 
-  // 2) Mostrar toast
-  showToast("Formulario enviado correctamente ✔️");
+        showToast("Formulario enviado correctamente ✔️");
 
-  // 3) Abrir diálogo de impresión medio segundo después
-  setTimeout(() => {
-    window.print();
-  }, 500);
-
-} catch (err) {
-  console.error("Error en fetch:", err);
-  output.textContent = "Error en fetch:\n" + err;
-  alert("Conexión fallida ❌ (fetch)");
-} finally {
-  if (loadingOverlay) loadingOverlay.classList.remove("active");
-  submitBtn.disabled = false;
-}
-
+      } catch (err) {
+        console.error("Error en fetch:", err);
+        output.textContent = "Error en fetch:\n" + err;
+        alert("Conexión fallida ❌ (fetch)");
+      } finally {
+        if (loadingOverlay) loadingOverlay.classList.remove("active");
+        submitBtn.disabled = false;
+      }
 
       // Limpiar formulario
       document.getElementById("empresa").value = "";
@@ -866,7 +851,7 @@
       fileLabelText.textContent = "No has seleccionado fotos";
     });
 
-    // Registro del Service Worker para PWA
+    // Service Worker PWA
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
@@ -877,7 +862,6 @@
   </script>
 </body>
 </html>
-
 
 
 
