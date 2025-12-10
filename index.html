@@ -19,9 +19,8 @@
   <link rel="icon" type="image/png" sizes="192x192" href="web-app-manifest-192x192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="web-app-manifest-512x512.png">
 
-  <!-- Signature Pad desde CDN -->
+  <!-- Signature Pad y html2canvas -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-  <!-- html2canvas para capturar la tarjeta como imagen -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -41,11 +40,11 @@
       color: #fff;
       display: flex;
       justify-content: center;
-      position: relative;    /* necesario para el ::before */
+      position: relative;
       overflow-x: hidden;
     }
 
-    /* Fondo tipo bandera de meta con el logo en diagonal */
+    /* Fondo con logo en diagonal */
     body::before {
       content: "";
       position: fixed;
@@ -93,7 +92,6 @@
       border: 1px solid #262626;
     }
 
-    /* LOGO RESPONSIVO */
     .header-logo {
       text-align: center;
       margin-bottom: 14px;
@@ -131,7 +129,6 @@
       flex-wrap: wrap;
     }
 
-    /* dos columnas cuando haya .half dentro de .input-row */
     .half {
       flex: 1;
       min-width: 48%;
@@ -247,6 +244,12 @@
       flex: 2;
     }
 
+    .btn-whatsapp {
+      background: #25D366;
+      color: #000;
+      flex: 2;
+    }
+
     .output {
       margin-top: 14px;
       font-size: 0.8rem;
@@ -267,7 +270,6 @@
       max-width: 100%;
     }
 
-    /* ====== ESTILOS INPUT DE FOTOS PERSONALIZADO ====== */
     .file-input-wrapper {
       margin-top: 6px;
       position: relative;
@@ -302,7 +304,6 @@
       white-space: nowrap;
     }
 
-    /* Ocultar el input real pero seguir siendo clickeable */
     .file-input-wrapper input[type="file"] {
       position: absolute;
       inset: 0;
@@ -310,7 +311,6 @@
       cursor: pointer;
     }
 
-    /* ========== LOADER CON LOGO FIJO + ARO GIRANDO ========== */
     .loading-overlay {
       position: fixed;
       inset: 0;
@@ -319,7 +319,6 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
-
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -365,7 +364,6 @@
       }
     }
 
-    /* ====== TOAST (mensaje flotante) ====== */
     .toast {
       position: fixed;
       bottom: 25px;
@@ -391,11 +389,9 @@
         background: #fff !important;
         color: #000 !important;
       }
-
       body::before {
         display: none !important;
       }
-
       .card {
         box-shadow: none;
         border: 1px solid #ccc;
@@ -404,7 +400,6 @@
         background: #fff !important;
         color: #000 !important;
       }
-
       .buttons,
       .output,
       .toast {
@@ -412,42 +407,34 @@
       }
     }
 
-    /* ====== RESPONSIVO EN TABLET / PC ====== */
     @media (min-width: 768px) {
       body {
         padding: 32px 16px;
       }
-
       .card {
         max-width: 700px;
         border-radius: 20px;
         padding: 28px 24px;
       }
-
       h1 {
         font-size: 2rem;
       }
-
       h2 {
         font-size: 1.35rem;
       }
-
       .label,
       .small {
         font-size: 0.95rem;
       }
-
       input,
       textarea,
       select {
         font-size: 1rem;
         padding: 14px 16px;
       }
-
       .check-item {
         font-size: 0.95rem;
       }
-
       .loader-wrapper {
         width: 170px;
         height: 170px;
@@ -457,13 +444,10 @@
 </head>
 
 <body>
-  <!-- AUDIO PARA EL MENSAJE DE GRACIAS -->
   <audio id="audio-gracias" src="audio.mp3" preload="auto"></audio>
 
-  <!-- TOAST (mensaje sin alert) -->
   <div id="toast" class="toast">Formulario enviado correctamente ✔️</div>
 
-  <!-- OVERLAY DE CARGA CON LOGO FIJO + ARO GIRANDO -->
   <div id="loading-overlay" class="loading-overlay">
     <div class="loader-wrapper">
       <div class="loader-ring"></div>
@@ -592,7 +576,6 @@
             No has seleccionado fotos
           </div>
         </div>
-        <!-- importante: cámara por defecto, se pueden acumular 5 -->
         <input type="file" id="fotos" accept="image/*" capture="environment" multiple>
       </div>
       <p class="small">Máximo 5 fotos por registro.</p>
@@ -607,7 +590,7 @@
     <div class="buttons">
       <button type="button" class="btn-clear" id="clear-btn">Borrar firma</button>
       <button type="button" class="btn-save" id="submit-btn">Enviar</button>
-      <button type="button" class="btn-save" id="share-btn">Enviar por WhatsApp</button>
+      <button type="button" class="btn-whatsapp" id="whatsapp-btn">Enviar por WhatsApp</button>
     </div>
 
     <div class="output" id="output"></div>
@@ -622,7 +605,7 @@
     const canvas = document.getElementById("signature-pad");
     const clearBtn = document.getElementById("clear-btn");
     const submitBtn = document.getElementById("submit-btn");
-    const shareBtn = document.getElementById("share-btn");
+    const whatsappBtn = document.getElementById("whatsapp-btn");
     const output = document.getElementById("output");
     const preview = document.getElementById("preview");
     const signatureImage = document.getElementById("signature-image");
@@ -631,14 +614,12 @@
     const audioGracias = document.getElementById("audio-gracias");
     const loadingOverlay = document.getElementById("loading-overlay");
     const placaInput = document.getElementById("placa");
-    const card = document.querySelector(".card");
 
-    // Forzar mayúsculas en placa
     placaInput.setAttribute("autocapitalize", "characters");
     placaInput.setAttribute("autocomplete", "off");
     placaInput.setAttribute("autocorrect", "off");
 
-    placaInput.addEventListener("input", function () {
+    placaInput.addEventListener("input", function (e) {
       const pos = this.selectionStart;
       this.value = this.value.toUpperCase();
       this.setSelectionRange(pos, pos);
@@ -673,16 +654,12 @@
       preview.style.display = "none";
     });
 
-    // Acumulador de fotos para permitir abrir cámara varias veces
     let fotosAcumuladas = [];
 
     fotosInput.addEventListener("change", () => {
       const nuevas = Array.from(fotosInput.files || []);
-
-      // Acumulamos y limitamos a 5 fotos
       fotosAcumuladas = [...fotosAcumuladas, ...nuevas].slice(0, 5);
 
-      // Texto del label
       if (fotosAcumuladas.length === 0) {
         fileLabelText.textContent = "No has seleccionado fotos";
       } else if (fotosAcumuladas.length === 1) {
@@ -691,15 +668,12 @@
         fileLabelText.textContent = `${fotosAcumuladas.length} fotos seleccionadas`;
       }
 
-      // Importante: limpiar input para poder volver a abrir cámara/galería
       fotosInput.value = "";
     });
 
-    // Convierte el archivo a Base64 pero antes lo comprime
     function fileToBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
-
         reader.onload = () => {
           const img = new Image();
           img.onload = () => {
@@ -726,11 +700,9 @@
             const base64 = compressedDataUrl.split(",")[1];
             resolve(base64);
           };
-
           img.onerror = (err) => reject(err);
           img.src = reader.result;
         };
-
         reader.onerror = reject;
         reader.readAsDataURL(file);
       });
@@ -738,7 +710,30 @@
 
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwQ2dWFOIrcufFyaeMkWV_SJbothm_AuZ4LRGGZzNR8A5SjaZIUD_eqhOK-ZyqCi6iI/exec";
 
-    // Enviar (guardar en Sheets / Drive)
+    function limpiarFormularioCompleto() {
+      document.getElementById("empresa").value = "";
+      document.getElementById("cliente").value = "";
+      document.getElementById("telefono").value = "";
+      document.getElementById("marca").value = "";
+      document.getElementById("modeloAnio").value = "";
+      document.getElementById("placa").value = "";
+      document.getElementById("color").value = "";
+      document.getElementById("trabajo").value = "";
+      document.getElementById("observaciones").value = "";
+      document.getElementById("fotos").value = "";
+      document.getElementById("seguro").value = "";
+
+      document
+        .querySelectorAll('input[name="elementos"]:checked')
+        .forEach(el => (el.checked = false));
+
+      signaturePad.clear();
+      preview.style.display = "none";
+
+      fotosAcumuladas = [];
+      fileLabelText.textContent = "No has seleccionado fotos";
+    }
+
     submitBtn.addEventListener("click", async () => {
       const cliente = document.getElementById("cliente").value.trim();
       const seguro  = document.getElementById("seguro").value.trim();
@@ -809,17 +804,12 @@
 
         output.textContent = "Formulario enviado correctamente ✔️";
 
-        // Audio de gracias
         if (audioGracias) {
           audioGracias.currentTime = 0;
           audioGracias.play().catch(() => {});
         }
 
         showToast("Formulario enviado correctamente ✔️");
-
-        // NOTA: No limpiamos el formulario aquí para que luego puedas usar "Enviar por WhatsApp"
-        // y la firma no se pierda. Para un nuevo cliente, puedes borrar manualmente o recargar.
-
       } catch (err) {
         console.error("Error en fetch:", err);
         output.textContent = "Error en fetch:\n" + err;
@@ -828,65 +818,57 @@
         if (loadingOverlay) loadingOverlay.classList.remove("active");
         submitBtn.disabled = false;
       }
+
+      // aquí recién limpiamos todo
+      limpiarFormularioCompleto();
     });
 
-    // Botón Enviar por WhatsApp (captura la tarjeta como imagen)
-    shareBtn.addEventListener("click", async () => {
+    whatsappBtn.addEventListener("click", async () => {
+      const cliente = document.getElementById("cliente").value.trim();
       const telefono = document.getElementById("telefono").value.trim();
+      const marca = document.getElementById("marca").value.trim();
+      const modeloAnio = document.getElementById("modeloAnio").value.trim();
+      const placa = document.getElementById("placa").value.trim();
 
       if (!telefono) {
-        alert("Primero completa el teléfono del cliente.");
+        alert("Completa el teléfono del cliente para enviar por WhatsApp");
+        return;
+      }
+
+      if (signaturePad.isEmpty()) {
+        alert("La firma es obligatoria antes de enviar por WhatsApp");
         return;
       }
 
       try {
-        const canvasCaptura = await html2canvas(card, {
-          scale: 2,
-          useCORS: true,
-          scrollY: -window.scrollY
-        });
+        // Captura visual de la tarjeta con los colores y la firma
+        const card = document.querySelector(".card");
+        const canvasImg = await html2canvas(card, { scale: 2, useCORS: true });
+        const dataUrl = canvasImg.toDataURL("image/png");
 
-        const dataUrl = canvasCaptura.toDataURL("image/png");
-        const res = await fetch(dataUrl);
-        const blob = await res.blob();
-        const file = new File([blob], "recepcion-vehiculo.png", { type: "image/png" });
-
-        const numeroLimpio = telefono.replace(/\D/g, "");
-        const numeroConCodigo = numeroLimpio.startsWith("591")
-          ? numeroLimpio
-          : "591" + numeroLimpio;
-
-        const textoMensaje = `Hola, adjunto la ficha de recepción de su vehículo.\n\nWhatsApp: https://wa.me/${numeroConCodigo}`;
-
-        // Intentar Web Share API con archivo
-        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            files: [file],
-            text: textoMensaje,
-            title: "Recepción de vehículo - LFP SRL"
-          });
-        } else {
-          // Fallback: descarga la imagen y abre el chat de WhatsApp
-          const linkDescarga = document.createElement("a");
-          linkDescarga.href = dataUrl;
-          linkDescarga.download = "recepcion-vehiculo.png";
-          document.body.appendChild(linkDescarga);
-          linkDescarga.click();
-          document.body.removeChild(linkDescarga);
-
-          const mensaje = encodeURIComponent("Hola, adjunto la ficha de recepción de su vehículo.");
-          const urlWA = `https://wa.me/${numeroConCodigo}?text=${mensaje}`;
-          window.open(urlWA, "_blank");
-
-          alert("Se descargó la imagen del formulario. Adjunta esa imagen desde tu galería/archivos en WhatsApp.");
+        // Abrir la imagen en una nueva pestaña para que la guardes y la adjuntes en WhatsApp
+        const imgWindow = window.open("");
+        if (imgWindow) {
+          imgWindow.document.write(
+            '<img src="' + dataUrl + '" style="width:100%;max-width:800px;">'
+          );
+          imgWindow.document.title = "Constancia recepción vehículo";
         }
+
+        // Abrir WhatsApp con mensaje prellenado (la imagen se adjunta manualmente)
+        const telSoloDigitos = telefono.replace(/\D/g, "");
+        const texto = encodeURIComponent(
+          `Hola ${cliente}, te envío la constancia de recepción de tu vehículo ${marca} ${modeloAnio}, placa ${placa}.`
+        );
+        const waUrl = `https://wa.me/591${telSoloDigitos}?text=${texto}`;
+        window.open(waUrl, "_blank");
       } catch (err) {
-        console.error("Error al generar o compartir la captura:", err);
-        alert("Ocurrió un error al generar la captura para WhatsApp.");
+        console.error("Error generando captura:", err);
+        alert("No se pudo generar la imagen para WhatsApp");
       }
     });
 
-    // Registro del Service Worker para PWA
+    // Service Worker PWA
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
@@ -897,22 +879,6 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
