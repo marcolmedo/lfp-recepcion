@@ -809,29 +809,38 @@
       preview.style.display = "none";
       output.textContent = "";
 
-      try {
-        await fetch(WEBAPP_URL, {
-          method: "POST",
-          body: formData,
-          mode: "no-cors"
-        });
+     try {
+  await fetch(WEBAPP_URL, {
+    method: "POST",
+    body: formData,
+    mode: "no-cors"
+  });
 
-        output.textContent = "Formulario enviado correctamente ✔️";
+  output.textContent = "Formulario enviado correctamente ✔️";
 
-        if (audioGracias) {
-          audioGracias.currentTime = 0;
-          audioGracias.play().catch(() => {});
-        }
+  // 1) Reproducir audio de gracias lo antes posible
+  if (audioGracias) {
+    audioGracias.currentTime = 0;
+    audioGracias.play().catch(() => {});
+  }
 
-        showToast("Formulario enviado correctamente ✔️");
-      } catch (err) {
-        console.error("Error en fetch:", err);
-        output.textContent = "Error en fetch:\n" + err;
-        alert("Conexión fallida ❌ (fetch)");
-      } finally {
-        if (loadingOverlay) loadingOverlay.classList.remove("active");
-        submitBtn.disabled = false;
-      }
+  // 2) Mostrar toast
+  showToast("Formulario enviado correctamente ✔️");
+
+  // 3) Abrir diálogo de impresión medio segundo después
+  setTimeout(() => {
+    window.print();
+  }, 500);
+
+} catch (err) {
+  console.error("Error en fetch:", err);
+  output.textContent = "Error en fetch:\n" + err;
+  alert("Conexión fallida ❌ (fetch)");
+} finally {
+  if (loadingOverlay) loadingOverlay.classList.remove("active");
+  submitBtn.disabled = false;
+}
+
 
       // Limpiar formulario
       document.getElementById("empresa").value = "";
@@ -868,6 +877,7 @@
   </script>
 </body>
 </html>
+
 
 
 
