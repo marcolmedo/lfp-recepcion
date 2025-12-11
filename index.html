@@ -854,33 +854,72 @@ whatsappBtn.addEventListener("click", async () => {
     return;
   }
 
+  // Armamos el link de WhatsApp
+  const telSoloDigitos = telefono.replace(/\D/g, "");
+  const texto = encodeURIComponent(
+    `Hola ${cliente}, te envío la constancia de recepción de tu vehículo ${marca} ${modeloAnio}, placa ${placa}.`
+  );
+  const waUrl = `https://wa.me/591${telSoloDigitos}?text=${texto}`;
 
-      // 1) Abrir WhatsApp primero
-      const telSoloDigitos = telefono.replace(/\D/g, "");
-      const texto = encodeURIComponent(
-        `Hola ${cliente}, te envío la constancia de recepción de tu vehículo ${marca} ${modeloAnio}, placa ${placa}.`
-      );
-      const waUrl = `https://wa.me/591${telSoloDigitos}?text=${texto}`;
-      window.open(waUrl, "_blank");
+  // 1) Reproducir el audio de gracias ANTES de abrir WhatsApp
+  if (audioGracias) {
+    try {
+      audioGracias.currentTime = 0;
+      // Iniciamos la reproducción
+      const playPromise = audioGracias.play();
 
-      // 2) Luego generar la captura con html2canvas (sin borrar nada)
-      try {
-        const card = document.querySelector(".card");
-        const canvasImg = await html2canvas(card, { scale: 2, useCORS: true });
-        const dataUrl = canvasImg.toDataURL("image/png");
-
-        const imgWindow = window.open("");
-        if (imgWindow) {
-          imgWindow.document.write(
-            '<img src="' + dataUrl + '" style="width:100%;max-width:800px;">'
-          );
-          imgWindow.document.title = "Constancia recepción vehículo";
-        }
-      } catch (err) {
-        console.error("Error generando captura:", err);
-        alert("No se pudo generar la imagen para WhatsApp");
+      if (playPromise !== undefined) {
+        await playPromise.catch(() => {});
       }
+
+      // Esperamos a que termine o un máximo de ~3.2 segundos
+      await new Promise((resolve) => {
+        let terminado = false;
+
+        const timeout = setTimeout(() => {
+          if (!terminado) {
+            terminado = true;
+            resolve();
+          }
+        }, 3200); // ajusta si tu audio dura más
+
+        audioGracias.onended = () => {
+          if (!terminado) {
+            terminado = true;
+            clearTimeout(timeout);
+            resolve();
+          }
+        };
+      });
+    } catch (err) {
+      console.log("No se pudo reproducir el audio, continúo igual:", err);
+    }
+  }
+
+  // 2) Ahora sí, abrimos WhatsApp
+  window.open(waUrl, "_blank");
+
+  // 3) (Opcional) generar captura de la tarjeta para compartirla manualmente
+  try {
+    const card = document.querySelector(".card");
+    const canvasImg = await html2canvas(card, {
+      scale: 2,
+      useCORS: true
     });
+    const dataUrl = canvasImg.toDataURL("image/png");
+
+    const imgWindow = window.open("");
+    if (imgWindow) {
+      imgWindow.document.write(
+        `<img src="${dataUrl}" style="width:100%;max-width:800px;">`
+      );
+      imgWindow.document.title = "Constancia recepción vehículo";
+    }
+  } catch (err) {
+    console.error("Error generando captura:", err);
+    alert("No se pudo generar la imagen para WhatsApp");
+  }
+});
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
@@ -892,6 +931,7 @@ whatsappBtn.addEventListener("click", async () => {
   </script>
 </body>
 </html>
+
 
 
 
