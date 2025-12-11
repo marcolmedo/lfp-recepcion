@@ -588,8 +588,8 @@
 
     <div class="buttons">
       <button type="button" class="btn-clear" id="clear-btn">Borrar firma</button>
-      <button type="button" class="btn-save" id="submit-btn">Enviar</button>
-      <button type="button" class="btn-whatsapp" id="whatsapp-btn">Enviar por WhatsApp</button>
+      <button type="button" class="btn-save" id="submit-btn">2) Enviar</button>
+      <button type="button" class="btn-whatsapp" id="whatsapp-btn">1) Enviar por WhatsApp</button>
     </div>
 
     <div class="output" id="output"></div>
@@ -818,11 +818,6 @@
 
         output.textContent = "Formulario enviado correctamente ✔️";
 
-        if (audioGracias) {
-          audioGracias.currentTime = 0;
-          audioGracias.play().catch(() => {});
-        }
-
         showToast("Formulario enviado correctamente ✔️");
       } catch (err) {
         console.error("Error en fetch:", err);
@@ -931,6 +926,7 @@ whatsappBtn.addEventListener("click", async () => {
   </script>
 </body>
 </html>
+
 
 
 
