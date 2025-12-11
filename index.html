@@ -36,7 +36,7 @@
       font-family: "Inter", sans-serif;
       margin: 0;
       padding: 16px 12px;
-      background: #050505;   /* color base */
+      background: #050505;
       color: #fff;
       display: flex;
       justify-content: center;
@@ -44,7 +44,6 @@
       overflow-x: hidden;
     }
 
-    /* Fondo con logo en diagonal */
     body::before {
       content: "";
       position: fixed;
@@ -633,21 +632,36 @@
       setTimeout(() => toast.classList.remove("show"), 2500);
     }
 
+    let signaturePad;
+
     function resizeCanvas() {
       const ratio = Math.max(window.devicePixelRatio || 1, 1);
       const container = document.getElementById("signature-container");
+
+      let data = null;
+      if (signaturePad && !signaturePad.isEmpty()) {
+        data = signaturePad.toData();
+      }
+
       canvas.width = container.clientWidth * ratio;
       canvas.height = container.clientHeight * ratio;
-      canvas.getContext("2d").scale(ratio, ratio);
+      const ctx = canvas.getContext("2d");
+      ctx.scale(ratio, ratio);
+
+      if (signaturePad && data) {
+        signaturePad.fromData(data);
+      }
     }
 
-    window.addEventListener("resize", resizeCanvas);
+    // Inicializar signaturePad DESPUÉS de definir resizeCanvas
     resizeCanvas();
-
-    const signaturePad = new SignaturePad(canvas, {
+    signaturePad = new SignaturePad(canvas, {
       backgroundColor: "white",
       penColor: "black"
     });
+
+    // Si quieres, puedes reactivar el resize, ahora preserva la firma:
+    window.addEventListener("resize", resizeCanvas);
 
     clearBtn.addEventListener("click", () => {
       signaturePad.clear();
@@ -819,10 +833,10 @@
         submitBtn.disabled = false;
       }
 
-      // aquí recién limpiamos todo
       limpiarFormularioCompleto();
     });
 
+    // BOTÓN WHATSAPP: primero abre WhatsApp, luego genera la imagen
     whatsappBtn.addEventListener("click", async () => {
       const cliente = document.getElementById("cliente").value.trim();
       const telefono = document.getElementById("telefono").value.trim();
@@ -840,13 +854,20 @@
         return;
       }
 
+      // 1) Abrir WhatsApp primero
+      const telSoloDigitos = telefono.replace(/\D/g, "");
+      const texto = encodeURIComponent(
+        `Hola ${cliente}, te envío la constancia de recepción de tu vehículo ${marca} ${modeloAnio}, placa ${placa}.`
+      );
+      const waUrl = `https://wa.me/591${telSoloDigitos}?text=${texto}`;
+      window.open(waUrl, "_blank");
+
+      // 2) Luego generar la captura con html2canvas (sin borrar nada)
       try {
-        // Captura visual de la tarjeta con los colores y la firma
         const card = document.querySelector(".card");
         const canvasImg = await html2canvas(card, { scale: 2, useCORS: true });
         const dataUrl = canvasImg.toDataURL("image/png");
 
-        // Abrir la imagen en una nueva pestaña para que la guardes y la adjuntes en WhatsApp
         const imgWindow = window.open("");
         if (imgWindow) {
           imgWindow.document.write(
@@ -854,21 +875,12 @@
           );
           imgWindow.document.title = "Constancia recepción vehículo";
         }
-
-        // Abrir WhatsApp con mensaje prellenado (la imagen se adjunta manualmente)
-        const telSoloDigitos = telefono.replace(/\D/g, "");
-        const texto = encodeURIComponent(
-          `Hola ${cliente}, te envío la constancia de recepción de tu vehículo ${marca} ${modeloAnio}, placa ${placa}.`
-        );
-        const waUrl = `https://wa.me/591${telSoloDigitos}?text=${texto}`;
-        window.open(waUrl, "_blank");
       } catch (err) {
         console.error("Error generando captura:", err);
         alert("No se pudo generar la imagen para WhatsApp");
       }
     });
 
-    // Service Worker PWA
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
@@ -879,6 +891,7 @@
   </script>
 </body>
 </html>
+
 
 
 
