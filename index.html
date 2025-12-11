@@ -533,18 +533,18 @@
     <div class="checklist">
       <label class="check-item"><input type="checkbox" name="elementos" value="Viseles" />Viseles</label>
       <label class="check-item"><input type="checkbox" name="elementos" value="Retrovisores" />Retrovisores</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Lateral derecho" />Lateral derecho</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Lateral izquierdo" />Lateral izquierdo</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Laterales posteriores" />Laterales posteriores</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Herramienta" />Herramienta</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Laterales fijos" />Laterales fijos</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Laterales Traseros" />Laterales Traseros</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Laterales Delanteros" />Laterales Delanteros</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Herramientas" />Herramientas</label>
       <label class="check-item"><input type="checkbox" name="elementos" value="Limpiaparabrisas" />Limpiaparabrisas</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Llanta auxiliar" />Llanta auxiliar</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Tapa aros" />Tapa aros</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Espejo interior" />Espejo interior</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Llanta Auxiliar" />Llanta Auxiliar</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Tapa Aros" />Tapa Aros</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Espejo Interior" />Espejo Interior</label>
       <label class="check-item"><input type="checkbox" name="elementos" value="Antena" />Antena</label>
       <label class="check-item"><input type="checkbox" name="elementos" value="Pintura" />Pintura</label>
       <label class="check-item"><input type="checkbox" name="elementos" value="Faroles" />Faroles</label>
-      <label class="check-item"><input type="checkbox" name="elementos" value="Equipo de sonido" />Equipo de sonido</label>
+      <label class="check-item"><input type="checkbox" name="elementos" value="Equipo De Sonido" />Equipo De Sonido</label>
       <label class="check-item"><input type="checkbox" name="elementos" value="Asientos" />Asientos</label>
       <label class="check-item"><input type="checkbox" name="elementos" value="Cenicero" />Cenicero</label>
       <label class="check-item"><input type="checkbox" name="elementos" value="Gato" />Gato</label>
@@ -556,7 +556,7 @@
     <!-- TRABAJO -->
     <h2>Trabajo a realizar</h2>
     <div class="field">
-      <textarea id="trabajo" placeholder="Cambio PB, Nano cerámico, PPF, etc."></textarea>
+      <textarea id="trabajo" placeholder="Cambio PB, Nanocerámico, PPF, etc."></textarea>
     </div>
 
     <!-- OBSERVACIONES -->
@@ -853,7 +853,7 @@ whatsappBtn.addEventListener("click", async () => {
   // Armamos el link de WhatsApp
   const telSoloDigitos = telefono.replace(/\D/g, "");
   const texto = encodeURIComponent(
-    `Hola ${cliente}, te envío la constancia de recepción de tu vehículo ${marca} ${modeloAnio}, placa ${placa}.`
+    `Hola ${cliente}, gracias por confiar en LFP Soluciones Automotrices te envío la constancia de recepción de tu vehículo ${marca} ${modeloAnio}, placa ${placa}.`
   );
   const waUrl = `https://wa.me/591${telSoloDigitos}?text=${texto}`;
 
@@ -927,6 +927,7 @@ whatsappBtn.addEventListener("click", async () => {
   </script>
 </body>
 </html>
+
 
 
 
