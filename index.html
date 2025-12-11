@@ -836,23 +836,57 @@
       limpiarFormularioCompleto();
     });
 
-    // BOTÓN WHATSAPP: primero abre WhatsApp, luego genera la imagen
-    whatsappBtn.addEventListener("click", async () => {
-      const cliente = document.getElementById("cliente").value.trim();
-      const telefono = document.getElementById("telefono").value.trim();
-      const marca = document.getElementById("marca").value.trim();
-      const modeloAnio = document.getElementById("modeloAnio").value.trim();
-      const placa = document.getElementById("placa").value.trim();
+   // BOTÓN WHATSAPP: primero abre WhatsApp, luego genera la imagen y suena el audio
+whatsappBtn.addEventListener("click", async () => {
+  const cliente = document.getElementById("cliente").value.trim();
+  const telefono = document.getElementById("telefono").value.trim();
+  const marca = document.getElementById("marca").value.trim();
+  const modeloAnio = document.getElementById("modeloAnio").value.trim();
+  const placa = document.getElementById("placa").value.trim();
 
-      if (!telefono) {
-        alert("Completa el teléfono del cliente para enviar por WhatsApp");
-        return;
-      }
+  if (!telefono) {
+    alert("Completa el teléfono del cliente para enviar por WhatsApp");
+    return;
+  }
 
-      if (signaturePad.isEmpty()) {
-        alert("La firma es obligatoria antes de enviar por WhatsApp");
-        return;
-      }
+  if (signaturePad.isEmpty()) {
+    alert("La firma es obligatoria antes de enviar por WhatsApp");
+    return;
+  }
+
+  // 1) Abrir WhatsApp primero
+  const telSoloDigitos = telefono.replace(/\D/g, "");
+  const texto = encodeURIComponent(
+    `Hola ${cliente}, te envío la constancia de recepción de tu vehículo ${marca} ${modeloAnio}, placa ${placa}.`
+  );
+  const waUrl = `https://wa.me/591${telSoloDigitos}?text=${texto}`;
+  window.open(waUrl, "_blank");
+
+  // 1.1) Reproducir audio de "gracias por confiar"
+  if (audioGracias) {
+    audioGracias.currentTime = 0;
+    audioGracias.play().catch(() => {});
+  }
+
+  // 2) Luego generar la captura con html2canvas (sin borrar nada)
+  try {
+    const card = document.querySelector(".card");
+    const canvasImg = await html2canvas(card, { scale: 2, useCORS: true });
+    const dataUrl = canvasImg.toDataURL("image/png");
+
+    const imgWindow = window.open("");
+    if (imgWindow) {
+      imgWindow.document.write(
+        '<img src="' + dataUrl + '" style="width:100%;max-width:800px;">'
+      );
+      imgWindow.document.title = "Constancia recepción vehículo";
+    }
+  } catch (err) {
+    console.error("Error generando captura:", err);
+    alert("No se pudo generar la imagen para WhatsApp");
+  }
+});
+
 
       // 1) Abrir WhatsApp primero
       const telSoloDigitos = telefono.replace(/\D/g, "");
@@ -891,6 +925,7 @@
   </script>
 </body>
 </html>
+
 
 
 
